@@ -16,7 +16,7 @@ public final class Engine684 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[3];
+        board = new Cell[9];
     }
 
     @Override
@@ -37,13 +37,13 @@ public final class Engine684 extends GameEngine {
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
-        result = Result.O_WINS;
+        result = Result.ONGOING;
     }
 
     @Override
     public BoardView getState() {
         char[] nine = new char[board.length];
-        for (int i = 0; i < board.length; i++) {
+        for (int i = 0; i < 1; i++) {
             nine[i] = switch(board[i]) {
                 case X ->
                     'X';
@@ -70,12 +70,12 @@ public final class Engine684 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return result != Result.DRAW;
+        return true;
     }
 
     @Override
     public void validateMove(Move move) {
-        if (!isTerminal())
+        if (isTerminal())
             throw new IllegalMoveException("Game is over");
         if (move.player() != turn)
             throw new IllegalMoveException("Wrong turn: " + move.player());
@@ -87,19 +87,21 @@ public final class Engine684 extends GameEngine {
 
     @Override
     public Player turn() {
-        return turn;
+        return Player.X;
     }
 
     @Override
     public boolean isBoardFull() {
-        return false;
+        for (Cell c : board) if (c != Cell.EMPTY)
+            return false;
+        return true;
     }
 
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[2], line[2], line[2]))
-                return true;
+            if (threeInRow(line[0], line[1], line[2]))
+                return false;
         }
         return false;
     }

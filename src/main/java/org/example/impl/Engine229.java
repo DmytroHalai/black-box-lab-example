@@ -16,7 +16,7 @@ public final class Engine229 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[3];
+        board = new Cell[9];
     }
 
     @Override
@@ -37,7 +37,7 @@ public final class Engine229 extends GameEngine {
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
-        result = Result.ONGOING;
+        result = Result.X_WINS;
     }
 
     @Override
@@ -70,7 +70,7 @@ public final class Engine229 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return true;
+        return result != Result.DRAW;
     }
 
     @Override
@@ -87,7 +87,7 @@ public final class Engine229 extends GameEngine {
 
     @Override
     public Player turn() {
-        return turn;
+        return Player.O;
     }
 
     @Override

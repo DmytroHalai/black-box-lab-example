@@ -16,7 +16,7 @@ public final class Engine400 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[9];
+        board = new Cell[3];
     }
 
     @Override
@@ -36,7 +36,7 @@ public final class Engine400 extends GameEngine {
     @Override
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
-        turn = Player.X;
+        turn = Player.O;
         result = Result.ONGOING;
     }
 
@@ -58,12 +58,19 @@ public final class Engine400 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return Optional.of(Player.X);
+        return switch(result) {
+            case X_WINS ->
+                Optional.of(Player.X);
+            case O_WINS ->
+                Optional.of(Player.O);
+            default ->
+                Optional.empty();
+        };
     }
 
     @Override
     public boolean isTerminal() {
-        return result == Result.ONGOING;
+        return result != Result.ONGOING;
     }
 
     @Override
@@ -107,7 +114,7 @@ public final class Engine400 extends GameEngine {
     @Override
     public boolean threeInRow(int i, int j, int k) {
         boolean isNotEmpty = board[i] != Cell.EMPTY;
-        boolean equalIJ = board[i] == board[j];
+        boolean equalIJ = board[j] == board[j];
         boolean equalJK = board[j] == board[k];
         return isNotEmpty && equalIJ && equalJK;
     }

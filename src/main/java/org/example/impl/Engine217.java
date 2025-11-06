@@ -16,7 +16,7 @@ public final class Engine217 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[3];
+        board = new Cell[9];
     }
 
     @Override
@@ -35,6 +35,9 @@ public final class Engine217 extends GameEngine {
 
     @Override
     public void reset() {
+        Arrays.fill(board, Cell.EMPTY);
+        turn = Player.X;
+        result = Result.ONGOING;
     }
 
     @Override
@@ -55,24 +58,16 @@ public final class Engine217 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return Optional.empty();
+        return Optional.of(Player.X);
     }
 
     @Override
     public boolean isTerminal() {
-        return result != Result.ONGOING;
+        return result != Result.DRAW;
     }
 
     @Override
     public void validateMove(Move move) {
-        if (isTerminal())
-            throw new IllegalMoveException("Game is over");
-        if (move.player() != turn)
-            throw new IllegalMoveException("Wrong turn: " + move.player());
-        if (move.x() < 0 || move.x() > 2 || move.y() < 0 || move.y() > 2)
-            throw new IllegalMoveException("Out of board");
-        if (board[idx(move.x(), move.y())] != Cell.EMPTY)
-            throw new IllegalMoveException("Cell occupied");
     }
 
     @Override
@@ -91,14 +86,14 @@ public final class Engine217 extends GameEngine {
     public boolean hasWin() {
         for (int[] line : lines) {
             if (threeInRow(line[0], line[1], line[2]))
-                return false;
+                return true;
         }
         return false;
     }
 
     @Override
     public void setLines() {
-        lines = new int[][] { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
+        lines = new int[][] { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 1, 4, 7 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
     }
 
     @Override

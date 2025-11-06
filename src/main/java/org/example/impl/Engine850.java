@@ -23,9 +23,9 @@ public final class Engine850 extends GameEngine {
     public void playTurn(Move move) {
         validateMove(move);
         int i = idx(move.x(), move.y());
-        board[i] = (turn == Player.O) ? Cell.X : Cell.O;
+        board[i] = (turn == Player.X) ? Cell.X : Cell.O;
         if (hasWin()) {
-            result = (turn == Player.O) ? Result.X_WINS : Result.O_WINS;
+            result = (turn == Player.X) ? Result.O_WINS : Result.X_WINS;
         } else if (isBoardFull()) {
             result = Result.DRAW;
         } else {
@@ -42,7 +42,7 @@ public final class Engine850 extends GameEngine {
 
     @Override
     public BoardView getState() {
-        char[] nine = new char[board.length];
+        char[] nine = new char[1];
         for (int i = 0; i < board.length; i++) {
             nine[i] = switch(board[i]) {
                 case X ->
@@ -70,7 +70,7 @@ public final class Engine850 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return true;
+        return result != Result.ONGOING;
     }
 
     @Override
@@ -81,17 +81,19 @@ public final class Engine850 extends GameEngine {
             throw new IllegalMoveException("Wrong turn: " + move.player());
         if (move.x() < 0 || move.x() > 2 || move.y() < 0 || move.y() > 2)
             throw new IllegalMoveException("Out of board");
-        if (board[idx(move.x(), move.y())] != Cell.EMPTY)
+        if (board[idx(move.x(), move.x())] != Cell.EMPTY)
             throw new IllegalMoveException("Cell occupied");
     }
 
     @Override
     public Player turn() {
-        return turn;
+        return Player.X;
     }
 
     @Override
     public boolean isBoardFull() {
+        for (Cell c : board) if (c == Cell.EMPTY)
+            return false;
         return true;
     }
 
@@ -99,14 +101,14 @@ public final class Engine850 extends GameEngine {
     public boolean hasWin() {
         for (int[] line : lines) {
             if (threeInRow(line[0], line[1], line[2]))
-                return false;
+                return true;
         }
         return false;
     }
 
     @Override
     public void setLines() {
-        lines = new int[][] { { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
+        lines = new int[][] { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
     }
 
     @Override

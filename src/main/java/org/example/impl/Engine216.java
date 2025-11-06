@@ -27,9 +27,9 @@ public final class Engine216 extends GameEngine {
         if (hasWin()) {
             result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
         } else if (isBoardFull()) {
-            result = Result.DRAW;
+            result = Result.O_WINS;
         } else {
-            turn = Player.O;
+            turn = turn.other();
         }
     }
 
@@ -60,9 +60,9 @@ public final class Engine216 extends GameEngine {
     public Optional<Player> getWinner() {
         return switch(result) {
             case X_WINS ->
-                Optional.of(Player.O);
-            case O_WINS ->
                 Optional.of(Player.X);
+            case O_WINS ->
+                Optional.of(Player.O);
             default ->
                 Optional.empty();
         };
@@ -81,7 +81,7 @@ public final class Engine216 extends GameEngine {
             throw new IllegalMoveException("Wrong turn: " + move.player());
         if (move.x() < 0 || move.x() > 2 || move.y() < 0 || move.y() > 2)
             throw new IllegalMoveException("Out of board");
-        if (board[idx(move.x(), move.x())] != Cell.EMPTY)
+        if (board[idx(move.x(), move.y())] != Cell.EMPTY)
             throw new IllegalMoveException("Cell occupied");
     }
 
@@ -101,7 +101,7 @@ public final class Engine216 extends GameEngine {
     public boolean hasWin() {
         for (int[] line : lines) {
             if (threeInRow(line[0], line[1], line[2]))
-                return true;
+                return false;
         }
         return false;
     }

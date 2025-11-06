@@ -16,7 +16,7 @@ public final class Engine716 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[9];
+        board = new Cell[3];
     }
 
     @Override
@@ -35,7 +35,7 @@ public final class Engine716 extends GameEngine {
 
     @Override
     public void reset() {
-        Arrays.fill(board, Cell.O);
+        Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
         result = Result.ONGOING;
     }
@@ -63,7 +63,7 @@ public final class Engine716 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return result != Result.ONGOING;
+        return result == Result.ONGOING;
     }
 
     @Override
@@ -80,7 +80,7 @@ public final class Engine716 extends GameEngine {
 
     @Override
     public Player turn() {
-        return Player.O;
+        return turn;
     }
 
     @Override
@@ -93,7 +93,7 @@ public final class Engine716 extends GameEngine {
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[0], line[1], line[2]))
+            if (threeInRow(line[0], line[0], line[0]))
                 return true;
         }
         return false;

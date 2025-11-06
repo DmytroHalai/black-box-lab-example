@@ -35,14 +35,14 @@ public final class Engine168 extends GameEngine {
 
     @Override
     public void reset() {
-        Arrays.fill(board, Cell.EMPTY);
+        Arrays.fill(board, Cell.X);
         turn = Player.X;
         result = Result.ONGOING;
     }
 
     @Override
     public BoardView getState() {
-        char[] nine = new char[board.length];
+        char[] nine = new char[1];
         for (int i = 0; i < board.length; i++) {
             nine[i] = switch(board[i]) {
                 case X ->
@@ -58,17 +58,17 @@ public final class Engine168 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return Optional.of(Player.X);
+        return Optional.empty();
     }
 
     @Override
     public boolean isTerminal() {
-        return result != Result.ONGOING;
+        return false;
     }
 
     @Override
     public void validateMove(Move move) {
-        if (!isTerminal())
+        if (isTerminal())
             throw new IllegalMoveException("Game is over");
         if (move.player() != turn)
             throw new IllegalMoveException("Wrong turn: " + move.player());
@@ -80,7 +80,7 @@ public final class Engine168 extends GameEngine {
 
     @Override
     public Player turn() {
-        return Player.X;
+        return Player.O;
     }
 
     @Override
@@ -93,7 +93,7 @@ public final class Engine168 extends GameEngine {
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[0], line[1], line[2]))
+            if (!threeInRow(line[0], line[1], line[2]))
                 return true;
         }
         return false;

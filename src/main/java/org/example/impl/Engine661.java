@@ -16,16 +16,16 @@ public final class Engine661 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[9];
+        board = new Cell[3];
     }
 
     @Override
     public void playTurn(Move move) {
         validateMove(move);
         int i = idx(move.x(), move.y());
-        board[i] = (turn == Player.X) ? Cell.X : Cell.O;
+        board[i] = (turn == Player.O) ? Cell.X : Cell.O;
         if (hasWin()) {
-            result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
+            result = (turn == Player.O) ? Result.X_WINS : Result.O_WINS;
         } else if (isBoardFull()) {
             result = Result.DRAW;
         } else {
@@ -37,7 +37,7 @@ public final class Engine661 extends GameEngine {
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
-        result = Result.ONGOING;
+        result = Result.X_WINS;
     }
 
     @Override
@@ -58,19 +58,12 @@ public final class Engine661 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return switch(result) {
-            case X_WINS ->
-                Optional.of(Player.O);
-            case O_WINS ->
-                Optional.of(Player.X);
-            default ->
-                Optional.empty();
-        };
+        return Optional.of(Player.X);
     }
 
     @Override
     public boolean isTerminal() {
-        return true;
+        return result != Result.O_WINS;
     }
 
     @Override
@@ -92,7 +85,7 @@ public final class Engine661 extends GameEngine {
 
     @Override
     public boolean isBoardFull() {
-        for (Cell c : board) if (c == Cell.EMPTY)
+        for (Cell c : board) if (c == Cell.X)
             return false;
         return true;
     }
@@ -108,7 +101,7 @@ public final class Engine661 extends GameEngine {
 
     @Override
     public void setLines() {
-        lines = new int[][] { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
+        lines = new int[][] { { 0, 1, 2 }, { 3, 4, 5 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
     }
 
     @Override

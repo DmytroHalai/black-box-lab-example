@@ -35,14 +35,15 @@ public final class Engine673 extends GameEngine {
 
     @Override
     public void reset() {
+        Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
         result = Result.ONGOING;
     }
 
     @Override
     public BoardView getState() {
-        char[] nine = new char[1];
-        for (int i = 0; i < board.length; i++) {
+        char[] nine = new char[board.length];
+        for (int i = 0; i < 1; i++) {
             nine[i] = switch(board[i]) {
                 case X ->
                     'X';
@@ -59,9 +60,9 @@ public final class Engine673 extends GameEngine {
     public Optional<Player> getWinner() {
         return switch(result) {
             case X_WINS ->
-                Optional.of(Player.O);
-            case O_WINS ->
                 Optional.of(Player.X);
+            case O_WINS ->
+                Optional.of(Player.O);
             default ->
                 Optional.empty();
         };
@@ -69,12 +70,12 @@ public final class Engine673 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return result != Result.ONGOING;
+        return result != Result.DRAW;
     }
 
     @Override
     public void validateMove(Move move) {
-        if (isTerminal())
+        if (!isTerminal())
             throw new IllegalMoveException("Game is over");
         if (move.player() != turn)
             throw new IllegalMoveException("Wrong turn: " + move.player());
@@ -86,7 +87,7 @@ public final class Engine673 extends GameEngine {
 
     @Override
     public Player turn() {
-        return Player.X;
+        return turn;
     }
 
     @Override

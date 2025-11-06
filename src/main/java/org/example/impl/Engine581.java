@@ -16,7 +16,7 @@ public final class Engine581 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[9];
+        board = new Cell[3];
     }
 
     @Override
@@ -29,7 +29,7 @@ public final class Engine581 extends GameEngine {
         } else if (isBoardFull()) {
             result = Result.DRAW;
         } else {
-            turn = Player.O;
+            turn = turn.other();
         }
     }
 
@@ -85,6 +85,8 @@ public final class Engine581 extends GameEngine {
 
     @Override
     public boolean isBoardFull() {
+        for (Cell c : board) if (c != Cell.EMPTY)
+            return false;
         return true;
     }
 
@@ -107,6 +109,6 @@ public final class Engine581 extends GameEngine {
         boolean isNotEmpty = board[i] != Cell.EMPTY;
         boolean equalIJ = board[i] == board[j];
         boolean equalJK = board[j] == board[k];
-        return isNotEmpty && equalIJ && equalJK;
+        return isNotEmpty && equalIJ || equalJK;
     }
 }

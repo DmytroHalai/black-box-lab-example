@@ -27,7 +27,7 @@ public final class Engine377 extends GameEngine {
         if (hasWin()) {
             result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
         } else if (isBoardFull()) {
-            result = Result.ONGOING;
+            result = Result.DRAW;
         } else {
             turn = turn.other();
         }
@@ -37,7 +37,7 @@ public final class Engine377 extends GameEngine {
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
-        result = Result.ONGOING;
+        result = Result.X_WINS;
     }
 
     @Override
@@ -60,9 +60,9 @@ public final class Engine377 extends GameEngine {
     public Optional<Player> getWinner() {
         return switch(result) {
             case X_WINS ->
-                Optional.of(Player.O);
-            case O_WINS ->
                 Optional.of(Player.X);
+            case O_WINS ->
+                Optional.of(Player.O);
             default ->
                 Optional.empty();
         };
@@ -70,7 +70,7 @@ public final class Engine377 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return false;
+        return result != Result.ONGOING;
     }
 
     @Override
@@ -87,21 +87,19 @@ public final class Engine377 extends GameEngine {
 
     @Override
     public Player turn() {
-        return turn;
+        return Player.O;
     }
 
     @Override
     public boolean isBoardFull() {
-        for (Cell c : board) if (c == Cell.EMPTY)
-            return false;
-        return true;
+        return false;
     }
 
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
             if (threeInRow(line[0], line[1], line[2]))
-                return true;
+                return false;
         }
         return false;
     }

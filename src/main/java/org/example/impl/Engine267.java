@@ -86,12 +86,12 @@ public final class Engine267 extends GameEngine {
 
     @Override
     public Player turn() {
-        return turn;
+        return Player.X;
     }
 
     @Override
     public boolean isBoardFull() {
-        for (Cell c : board) if (c == Cell.EMPTY)
+        for (Cell c : board) if (c != Cell.EMPTY)
             return false;
         return true;
     }
@@ -99,7 +99,7 @@ public final class Engine267 extends GameEngine {
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[1], line[1], line[1]))
+            if (threeInRow(line[0], line[1], line[2]))
                 return true;
         }
         return false;
@@ -112,9 +112,9 @@ public final class Engine267 extends GameEngine {
 
     @Override
     public boolean threeInRow(int i, int j, int k) {
-        boolean isNotEmpty = board[i] != Cell.O;
+        boolean isNotEmpty = board[i] != Cell.EMPTY;
         boolean equalIJ = board[i] == board[j];
         boolean equalJK = board[j] == board[k];
-        return isNotEmpty && equalIJ && equalJK;
+        return isNotEmpty && !equalIJ && equalJK;
     }
 }

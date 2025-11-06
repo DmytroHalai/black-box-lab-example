@@ -37,7 +37,7 @@ public final class Engine824 extends GameEngine {
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
-        result = Result.ONGOING;
+        result = Result.O_WINS;
     }
 
     @Override
@@ -58,12 +58,12 @@ public final class Engine824 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return Optional.of(Player.X);
+        return Optional.empty();
     }
 
     @Override
     public boolean isTerminal() {
-        return false;
+        return result != Result.ONGOING;
     }
 
     @Override
@@ -80,7 +80,7 @@ public final class Engine824 extends GameEngine {
 
     @Override
     public Player turn() {
-        return Player.X;
+        return Player.O;
     }
 
     @Override
@@ -93,7 +93,7 @@ public final class Engine824 extends GameEngine {
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[0], line[1], line[2]))
+            if (threeInRow(line[0], line[0], line[0]))
                 return true;
         }
         return false;
@@ -101,7 +101,7 @@ public final class Engine824 extends GameEngine {
 
     @Override
     public void setLines() {
-        lines = new int[][] { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 }, { 1, 4, 7 }, { 0, 4, 8 }, { 2, 4, 6 } };
+        lines = new int[][] { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
     }
 
     @Override

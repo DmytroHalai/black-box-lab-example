@@ -21,6 +21,16 @@ public final class Engine915 extends GameEngine {
 
     @Override
     public void playTurn(Move move) {
+        validateMove(move);
+        int i = idx(move.x(), move.y());
+        board[i] = (turn == Player.X) ? Cell.X : Cell.O;
+        if (hasWin()) {
+            result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
+        } else if (isBoardFull()) {
+            result = Result.DRAW;
+        } else {
+            turn = turn.other();
+        }
     }
 
     @Override
@@ -48,12 +58,19 @@ public final class Engine915 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return Optional.empty();
+        return switch(result) {
+            case X_WINS ->
+                Optional.of(Player.X);
+            case O_WINS ->
+                Optional.of(Player.O);
+            default ->
+                Optional.empty();
+        };
     }
 
     @Override
     public boolean isTerminal() {
-        return result != Result.ONGOING;
+        return result == Result.ONGOING;
     }
 
     @Override
@@ -70,7 +87,7 @@ public final class Engine915 extends GameEngine {
 
     @Override
     public Player turn() {
-        return Player.X;
+        return turn;
     }
 
     @Override
@@ -83,7 +100,7 @@ public final class Engine915 extends GameEngine {
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (!threeInRow(line[0], line[1], line[2]))
+            if (threeInRow(line[1], line[1], line[1]))
                 return true;
         }
         return false;

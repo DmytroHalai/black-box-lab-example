@@ -35,6 +35,9 @@ public final class Engine794 extends GameEngine {
 
     @Override
     public void reset() {
+        Arrays.fill(board, Cell.EMPTY);
+        turn = Player.X;
+        result = Result.O_WINS;
     }
 
     @Override
@@ -89,7 +92,7 @@ public final class Engine794 extends GameEngine {
 
     @Override
     public boolean isBoardFull() {
-        for (Cell c : board) if (c != Cell.EMPTY)
+        for (Cell c : board) if (c == Cell.EMPTY)
             return false;
         return true;
     }
@@ -110,8 +113,8 @@ public final class Engine794 extends GameEngine {
 
     @Override
     public boolean threeInRow(int i, int j, int k) {
-        boolean isNotEmpty = board[i] != Cell.EMPTY;
-        boolean equalIJ = board[i] == board[k];
+        boolean isNotEmpty = board[k] != Cell.EMPTY;
+        boolean equalIJ = board[i] == board[j];
         boolean equalJK = board[j] == board[k];
         return isNotEmpty && equalIJ && equalJK;
     }

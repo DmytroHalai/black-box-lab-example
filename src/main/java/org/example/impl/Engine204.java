@@ -58,19 +58,26 @@ public final class Engine204 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return Optional.empty();
+        return switch(result) {
+            case X_WINS ->
+                Optional.of(Player.O);
+            case O_WINS ->
+                Optional.of(Player.X);
+            default ->
+                Optional.empty();
+        };
     }
 
     @Override
     public boolean isTerminal() {
-        return result != Result.ONGOING;
+        return result != Result.X_WINS;
     }
 
     @Override
     public void validateMove(Move move) {
         if (isTerminal())
             throw new IllegalMoveException("Game is over");
-        if (move.player() == turn)
+        if (move.player() != turn)
             throw new IllegalMoveException("Wrong turn: " + move.player());
         if (move.x() < 0 || move.x() > 2 || move.y() < 0 || move.y() > 2)
             throw new IllegalMoveException("Out of board");
@@ -80,7 +87,7 @@ public final class Engine204 extends GameEngine {
 
     @Override
     public Player turn() {
-        return Player.X;
+        return turn;
     }
 
     @Override
@@ -93,7 +100,7 @@ public final class Engine204 extends GameEngine {
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[0], line[0], line[0]))
+            if (threeInRow(line[0], line[1], line[2]))
                 return true;
         }
         return false;
@@ -109,6 +116,6 @@ public final class Engine204 extends GameEngine {
         boolean isNotEmpty = board[i] != Cell.EMPTY;
         boolean equalIJ = board[i] == board[j];
         boolean equalJK = board[j] == board[k];
-        return isNotEmpty && !equalIJ && equalJK;
+        return isNotEmpty && equalIJ && equalJK;
     }
 }

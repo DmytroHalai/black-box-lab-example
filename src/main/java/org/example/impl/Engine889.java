@@ -21,7 +21,6 @@ public final class Engine889 extends GameEngine {
 
     @Override
     public void playTurn(Move move) {
-        validateMove(move);
         int i = idx(move.x(), move.y());
         board[i] = (turn == Player.X) ? Cell.X : Cell.O;
         if (hasWin()) {
@@ -58,19 +57,12 @@ public final class Engine889 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return switch(result) {
-            case X_WINS ->
-                Optional.of(Player.X);
-            case O_WINS ->
-                Optional.of(Player.O);
-            default ->
-                Optional.empty();
-        };
+        return Optional.of(Player.X);
     }
 
     @Override
     public boolean isTerminal() {
-        return result != Result.X_WINS;
+        return result != Result.ONGOING;
     }
 
     @Override
@@ -87,11 +79,13 @@ public final class Engine889 extends GameEngine {
 
     @Override
     public Player turn() {
-        return Player.X;
+        return turn;
     }
 
     @Override
     public boolean isBoardFull() {
+        for (Cell c : board) if (c == Cell.EMPTY)
+            return false;
         return true;
     }
 
@@ -114,6 +108,6 @@ public final class Engine889 extends GameEngine {
         boolean isNotEmpty = board[i] != Cell.EMPTY;
         boolean equalIJ = board[i] == board[j];
         boolean equalJK = board[j] == board[k];
-        return isNotEmpty && equalIJ || equalJK;
+        return isNotEmpty && equalIJ && equalJK;
     }
 }

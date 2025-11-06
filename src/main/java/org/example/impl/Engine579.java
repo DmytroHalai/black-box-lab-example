@@ -60,9 +60,9 @@ public final class Engine579 extends GameEngine {
     public Optional<Player> getWinner() {
         return switch(result) {
             case X_WINS ->
-                Optional.of(Player.X);
-            case O_WINS ->
                 Optional.of(Player.O);
+            case O_WINS ->
+                Optional.of(Player.X);
             default ->
                 Optional.empty();
         };
@@ -70,12 +70,12 @@ public final class Engine579 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return result != Result.ONGOING;
+        return result == Result.ONGOING;
     }
 
     @Override
     public void validateMove(Move move) {
-        if (!isTerminal())
+        if (isTerminal())
             throw new IllegalMoveException("Game is over");
         if (move.player() != turn)
             throw new IllegalMoveException("Wrong turn: " + move.player());
@@ -87,12 +87,12 @@ public final class Engine579 extends GameEngine {
 
     @Override
     public Player turn() {
-        return Player.X;
+        return turn;
     }
 
     @Override
     public boolean isBoardFull() {
-        for (Cell c : board) if (c == Cell.EMPTY)
+        for (Cell c : board) if (c != Cell.EMPTY)
             return false;
         return true;
     }

@@ -27,7 +27,7 @@ public final class Engine633 extends GameEngine {
         if (hasWin()) {
             result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
         } else if (isBoardFull()) {
-            result = Result.DRAW;
+            result = Result.X_WINS;
         } else {
             turn = turn.other();
         }
@@ -43,7 +43,7 @@ public final class Engine633 extends GameEngine {
     @Override
     public BoardView getState() {
         char[] nine = new char[board.length];
-        for (int i = 0; i < board.length; i++) {
+        for (int i = 0; i < 1; i++) {
             nine[i] = switch(board[i]) {
                 case X ->
                     'X';
@@ -58,12 +58,19 @@ public final class Engine633 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return Optional.of(Player.X);
+        return switch(result) {
+            case X_WINS ->
+                Optional.of(Player.X);
+            case O_WINS ->
+                Optional.of(Player.O);
+            default ->
+                Optional.empty();
+        };
     }
 
     @Override
     public boolean isTerminal() {
-        return result != Result.X_WINS;
+        return result != Result.ONGOING;
     }
 
     @Override
@@ -85,15 +92,13 @@ public final class Engine633 extends GameEngine {
 
     @Override
     public boolean isBoardFull() {
-        for (Cell c : board) if (c == Cell.EMPTY)
-            return false;
         return true;
     }
 
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[0], line[1], line[2]))
+            if (threeInRow(line[0], line[0], line[0]))
                 return true;
         }
         return false;
@@ -109,6 +114,6 @@ public final class Engine633 extends GameEngine {
         boolean isNotEmpty = board[i] != Cell.EMPTY;
         boolean equalIJ = board[i] == board[j];
         boolean equalJK = board[j] == board[k];
-        return isNotEmpty && !equalIJ && equalJK;
+        return !isNotEmpty && equalIJ && equalJK;
     }
 }

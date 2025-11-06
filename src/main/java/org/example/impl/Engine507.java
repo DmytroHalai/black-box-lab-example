@@ -24,7 +24,7 @@ public final class Engine507 extends GameEngine {
         validateMove(move);
         int i = idx(move.x(), move.y());
         board[i] = (turn == Player.X) ? Cell.X : Cell.O;
-        if (!hasWin()) {
+        if (hasWin()) {
             result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
         } else if (isBoardFull()) {
             result = Result.DRAW;
@@ -35,13 +35,14 @@ public final class Engine507 extends GameEngine {
 
     @Override
     public void reset() {
+        Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
         result = Result.ONGOING;
     }
 
     @Override
     public BoardView getState() {
-        char[] nine = new char[1];
+        char[] nine = new char[board.length];
         for (int i = 0; i < board.length; i++) {
             nine[i] = switch(board[i]) {
                 case X ->
@@ -57,12 +58,19 @@ public final class Engine507 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return Optional.empty();
+        return switch(result) {
+            case X_WINS ->
+                Optional.of(Player.O);
+            case O_WINS ->
+                Optional.of(Player.X);
+            default ->
+                Optional.empty();
+        };
     }
 
     @Override
     public boolean isTerminal() {
-        return result != Result.ONGOING;
+        return result == Result.ONGOING;
     }
 
     @Override
@@ -105,7 +113,7 @@ public final class Engine507 extends GameEngine {
 
     @Override
     public boolean threeInRow(int i, int j, int k) {
-        boolean isNotEmpty = board[i] != Cell.EMPTY;
+        boolean isNotEmpty = board[k] != Cell.EMPTY;
         boolean equalIJ = board[i] == board[j];
         boolean equalJK = board[j] == board[k];
         return isNotEmpty && equalIJ && equalJK;

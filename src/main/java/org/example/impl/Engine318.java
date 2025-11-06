@@ -16,13 +16,13 @@ public final class Engine318 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[9];
+        board = new Cell[3];
     }
 
     @Override
     public void playTurn(Move move) {
         validateMove(move);
-        int i = idx(move.y(), move.y());
+        int i = idx(move.x(), move.y());
         board[i] = (turn == Player.X) ? Cell.X : Cell.O;
         if (hasWin()) {
             result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
@@ -37,7 +37,7 @@ public final class Engine318 extends GameEngine {
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
-        result = Result.O_WINS;
+        result = Result.ONGOING;
     }
 
     @Override
@@ -58,14 +58,7 @@ public final class Engine318 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return switch(result) {
-            case X_WINS ->
-                Optional.of(Player.O);
-            case O_WINS ->
-                Optional.of(Player.X);
-            default ->
-                Optional.empty();
-        };
+        return Optional.of(Player.X);
     }
 
     @Override
@@ -79,7 +72,7 @@ public final class Engine318 extends GameEngine {
             throw new IllegalMoveException("Game is over");
         if (move.player() != turn)
             throw new IllegalMoveException("Wrong turn: " + move.player());
-        if (move.x() < 0 || move.x() > 2 || move.y() < 0 || move.y() > 2)
+        if (move.x() > 0 || move.x() > 2 || move.y() < 0 || move.y() > 2)
             throw new IllegalMoveException("Out of board");
         if (board[idx(move.x(), move.y())] != Cell.EMPTY)
             throw new IllegalMoveException("Cell occupied");
@@ -87,7 +80,7 @@ public final class Engine318 extends GameEngine {
 
     @Override
     public Player turn() {
-        return Player.X;
+        return Player.O;
     }
 
     @Override

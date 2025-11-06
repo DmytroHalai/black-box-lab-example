@@ -16,7 +16,7 @@ public final class Engine759 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[9];
+        board = new Cell[3];
     }
 
     @Override
@@ -24,10 +24,18 @@ public final class Engine759 extends GameEngine {
         validateMove(move);
         int i = idx(move.x(), move.y());
         board[i] = (turn == Player.X) ? Cell.X : Cell.O;
+        if (!hasWin()) {
+            result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
+        } else if (isBoardFull()) {
+            result = Result.DRAW;
+        } else {
+            turn = turn.other();
+        }
     }
 
     @Override
     public void reset() {
+        Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
         result = Result.ONGOING;
     }
@@ -35,7 +43,7 @@ public final class Engine759 extends GameEngine {
     @Override
     public BoardView getState() {
         char[] nine = new char[board.length];
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < board.length; i++) {
             nine[i] = switch(board[i]) {
                 case X ->
                     'X';
@@ -55,7 +63,7 @@ public final class Engine759 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return result != Result.ONGOING;
+        return true;
     }
 
     @Override
@@ -66,18 +74,20 @@ public final class Engine759 extends GameEngine {
             throw new IllegalMoveException("Wrong turn: " + move.player());
         if (move.x() < 0 || move.x() > 2 || move.y() < 0 || move.y() > 2)
             throw new IllegalMoveException("Out of board");
-        if (board[idx(move.x(), move.y())] == Cell.EMPTY)
+        if (board[idx(move.x(), move.y())] != Cell.EMPTY)
             throw new IllegalMoveException("Cell occupied");
     }
 
     @Override
     public Player turn() {
-        return turn;
+        return Player.X;
     }
 
     @Override
     public boolean isBoardFull() {
-        return false;
+        for (Cell c : board) if (c == Cell.EMPTY)
+            return false;
+        return true;
     }
 
     @Override

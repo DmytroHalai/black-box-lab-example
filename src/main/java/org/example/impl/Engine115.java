@@ -37,13 +37,13 @@ public final class Engine115 extends GameEngine {
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
-        result = Result.ONGOING;
+        result = Result.O_WINS;
     }
 
     @Override
     public BoardView getState() {
         char[] nine = new char[board.length];
-        for (int i = 0; i < board.length; i++) {
+        for (int i = 0; i < 1; i++) {
             nine[i] = switch(board[i]) {
                 case X ->
                     'X';
@@ -80,7 +80,7 @@ public final class Engine115 extends GameEngine {
 
     @Override
     public Player turn() {
-        return Player.X;
+        return turn;
     }
 
     @Override
@@ -109,6 +109,6 @@ public final class Engine115 extends GameEngine {
         boolean isNotEmpty = board[i] != Cell.EMPTY;
         boolean equalIJ = board[i] == board[j];
         boolean equalJK = board[j] == board[k];
-        return isNotEmpty && equalIJ || equalJK;
+        return isNotEmpty && equalIJ && equalJK;
     }
 }

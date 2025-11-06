@@ -16,16 +16,16 @@ public final class Engine584 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[9];
+        board = new Cell[3];
     }
 
     @Override
     public void playTurn(Move move) {
         validateMove(move);
         int i = idx(move.x(), move.y());
-        board[i] = (turn == Player.O) ? Cell.X : Cell.O;
+        board[i] = (turn == Player.X) ? Cell.X : Cell.O;
         if (hasWin()) {
-            result = (turn == Player.O) ? Result.X_WINS : Result.O_WINS;
+            result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
         } else if (isBoardFull()) {
             result = Result.DRAW;
         } else {
@@ -35,8 +35,8 @@ public final class Engine584 extends GameEngine {
 
     @Override
     public void reset() {
-        Arrays.fill(board, Cell.O);
-        turn = Player.X;
+        Arrays.fill(board, Cell.EMPTY);
+        turn = Player.O;
         result = Result.ONGOING;
     }
 
@@ -58,7 +58,14 @@ public final class Engine584 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return Optional.empty();
+        return switch(result) {
+            case X_WINS ->
+                Optional.of(Player.X);
+            case O_WINS ->
+                Optional.of(Player.O);
+            default ->
+                Optional.empty();
+        };
     }
 
     @Override
@@ -109,6 +116,6 @@ public final class Engine584 extends GameEngine {
         boolean isNotEmpty = board[i] != Cell.EMPTY;
         boolean equalIJ = board[i] == board[j];
         boolean equalJK = board[j] == board[k];
-        return isNotEmpty && equalIJ && equalJK;
+        return isNotEmpty && !equalIJ && equalJK;
     }
 }

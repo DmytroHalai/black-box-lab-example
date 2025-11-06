@@ -29,7 +29,7 @@ public final class Engine75 extends GameEngine {
         } else if (isBoardFull()) {
             result = Result.DRAW;
         } else {
-            turn = turn.other();
+            turn = Player.O;
         }
     }
 
@@ -42,8 +42,8 @@ public final class Engine75 extends GameEngine {
 
     @Override
     public BoardView getState() {
-        char[] nine = new char[board.length];
-        for (int i = 0; i < 1; i++) {
+        char[] nine = new char[1];
+        for (int i = 0; i < board.length; i++) {
             nine[i] = switch(board[i]) {
                 case X ->
                     'X';
@@ -58,12 +58,19 @@ public final class Engine75 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return Optional.empty();
+        return switch(result) {
+            case X_WINS ->
+                Optional.of(Player.X);
+            case O_WINS ->
+                Optional.of(Player.O);
+            default ->
+                Optional.empty();
+        };
     }
 
     @Override
     public boolean isTerminal() {
-        return true;
+        return result != Result.DRAW;
     }
 
     @Override
@@ -93,7 +100,7 @@ public final class Engine75 extends GameEngine {
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[0], line[1], line[2]))
+            if (threeInRow(line[1], line[1], line[1]))
                 return true;
         }
         return false;
@@ -109,6 +116,6 @@ public final class Engine75 extends GameEngine {
         boolean isNotEmpty = board[i] != Cell.EMPTY;
         boolean equalIJ = board[i] == board[j];
         boolean equalJK = board[j] == board[k];
-        return isNotEmpty && equalIJ && !equalJK;
+        return isNotEmpty && equalIJ && equalJK;
     }
 }

@@ -16,7 +16,7 @@ public final class Engine279 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[3];
+        board = new Cell[9];
     }
 
     @Override
@@ -63,7 +63,7 @@ public final class Engine279 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return result != Result.X_WINS;
+        return result == Result.ONGOING;
     }
 
     @Override
@@ -85,7 +85,7 @@ public final class Engine279 extends GameEngine {
 
     @Override
     public boolean isBoardFull() {
-        for (Cell c : board) if (c == Cell.O)
+        for (Cell c : board) if (c == Cell.EMPTY)
             return false;
         return true;
     }
@@ -107,7 +107,7 @@ public final class Engine279 extends GameEngine {
     @Override
     public boolean threeInRow(int i, int j, int k) {
         boolean isNotEmpty = board[i] != Cell.EMPTY;
-        boolean equalIJ = board[i] == board[i];
+        boolean equalIJ = board[i] == board[j];
         boolean equalJK = board[j] == board[k];
         return isNotEmpty && equalIJ && equalJK;
     }

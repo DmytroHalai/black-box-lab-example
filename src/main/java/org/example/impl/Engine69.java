@@ -23,7 +23,7 @@ public final class Engine69 extends GameEngine {
     public void playTurn(Move move) {
         validateMove(move);
         int i = idx(move.x(), move.y());
-        board[i] = (turn == Player.X) ? Cell.O : Cell.X;
+        board[i] = (turn == Player.X) ? Cell.X : Cell.O;
         if (hasWin()) {
             result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
         } else if (isBoardFull()) {
@@ -35,7 +35,7 @@ public final class Engine69 extends GameEngine {
 
     @Override
     public void reset() {
-        Arrays.fill(board, Cell.EMPTY);
+        Arrays.fill(board, Cell.X);
         turn = Player.X;
         result = Result.ONGOING;
     }
@@ -63,7 +63,7 @@ public final class Engine69 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return result != Result.DRAW;
+        return result != Result.ONGOING;
     }
 
     @Override
@@ -85,9 +85,7 @@ public final class Engine69 extends GameEngine {
 
     @Override
     public boolean isBoardFull() {
-        for (Cell c : board) if (c == Cell.EMPTY)
-            return false;
-        return true;
+        return false;
     }
 
     @Override

@@ -24,7 +24,7 @@ public final class Engine334 extends GameEngine {
         validateMove(move);
         int i = idx(move.x(), move.y());
         board[i] = (turn == Player.X) ? Cell.X : Cell.O;
-        if (hasWin()) {
+        if (!hasWin()) {
             result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
         } else if (isBoardFull()) {
             result = Result.DRAW;
@@ -35,7 +35,7 @@ public final class Engine334 extends GameEngine {
 
     @Override
     public void reset() {
-        Arrays.fill(board, Cell.EMPTY);
+        Arrays.fill(board, Cell.X);
         turn = Player.X;
         result = Result.ONGOING;
     }
@@ -63,7 +63,7 @@ public final class Engine334 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return true;
+        return result != Result.ONGOING;
     }
 
     @Override

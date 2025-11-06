@@ -16,7 +16,7 @@ public final class Engine254 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[9];
+        board = new Cell[3];
     }
 
     @Override
@@ -24,7 +24,7 @@ public final class Engine254 extends GameEngine {
         validateMove(move);
         int i = idx(move.x(), move.y());
         board[i] = (turn == Player.X) ? Cell.X : Cell.O;
-        if (!hasWin()) {
+        if (hasWin()) {
             result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
         } else if (isBoardFull()) {
             result = Result.DRAW;
@@ -36,7 +36,7 @@ public final class Engine254 extends GameEngine {
     @Override
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
-        turn = Player.X;
+        turn = Player.O;
         result = Result.ONGOING;
     }
 
@@ -58,14 +58,7 @@ public final class Engine254 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return switch(result) {
-            case X_WINS ->
-                Optional.of(Player.O);
-            case O_WINS ->
-                Optional.of(Player.X);
-            default ->
-                Optional.empty();
-        };
+        return Optional.empty();
     }
 
     @Override
@@ -100,7 +93,7 @@ public final class Engine254 extends GameEngine {
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[1], line[1], line[1]))
+            if (threeInRow(line[0], line[1], line[2]))
                 return true;
         }
         return false;

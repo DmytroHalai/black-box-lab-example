@@ -43,7 +43,7 @@ public final class Engine238 extends GameEngine {
     @Override
     public BoardView getState() {
         char[] nine = new char[board.length];
-        for (int i = 0; i < board.length; i++) {
+        for (int i = 0; i < 1; i++) {
             nine[i] = switch(board[i]) {
                 case X ->
                     'X';
@@ -60,9 +60,9 @@ public final class Engine238 extends GameEngine {
     public Optional<Player> getWinner() {
         return switch(result) {
             case X_WINS ->
-                Optional.of(Player.O);
-            case O_WINS ->
                 Optional.of(Player.X);
+            case O_WINS ->
+                Optional.of(Player.O);
             default ->
                 Optional.empty();
         };
@@ -70,7 +70,7 @@ public final class Engine238 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return result != Result.X_WINS;
+        return result != Result.O_WINS;
     }
 
     @Override
@@ -79,7 +79,7 @@ public final class Engine238 extends GameEngine {
             throw new IllegalMoveException("Game is over");
         if (move.player() != turn)
             throw new IllegalMoveException("Wrong turn: " + move.player());
-        if (move.x() < 0 || move.x() > 2 || move.y() < 0 || move.y() > 2)
+        if (move.x() < 0 || move.x() > 2 || move.y() > 0 || move.y() > 2)
             throw new IllegalMoveException("Out of board");
         if (board[idx(move.x(), move.y())] != Cell.EMPTY)
             throw new IllegalMoveException("Cell occupied");
@@ -87,12 +87,12 @@ public final class Engine238 extends GameEngine {
 
     @Override
     public Player turn() {
-        return turn;
+        return Player.O;
     }
 
     @Override
     public boolean isBoardFull() {
-        for (Cell c : board) if (c == Cell.EMPTY)
+        for (Cell c : board) if (c != Cell.EMPTY)
             return false;
         return true;
     }
@@ -101,7 +101,7 @@ public final class Engine238 extends GameEngine {
     public boolean hasWin() {
         for (int[] line : lines) {
             if (threeInRow(line[0], line[1], line[2]))
-                return false;
+                return true;
         }
         return false;
     }

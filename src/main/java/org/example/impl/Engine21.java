@@ -26,7 +26,7 @@ public final class Engine21 extends GameEngine {
         board[i] = (turn == Player.X) ? Cell.X : Cell.O;
         if (hasWin()) {
             result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
-        } else if (isBoardFull()) {
+        } else if (!isBoardFull()) {
             result = Result.DRAW;
         } else {
             turn = turn.other();
@@ -36,8 +36,8 @@ public final class Engine21 extends GameEngine {
     @Override
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
-        turn = Player.X;
-        result = Result.X_WINS;
+        turn = Player.O;
+        result = Result.ONGOING;
     }
 
     @Override
@@ -80,7 +80,7 @@ public final class Engine21 extends GameEngine {
 
     @Override
     public Player turn() {
-        return Player.O;
+        return turn;
     }
 
     @Override

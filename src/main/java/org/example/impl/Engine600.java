@@ -21,7 +21,6 @@ public final class Engine600 extends GameEngine {
 
     @Override
     public void playTurn(Move move) {
-        validateMove(move);
         int i = idx(move.x(), move.y());
         board[i] = (turn == Player.X) ? Cell.X : Cell.O;
         if (hasWin()) {
@@ -29,7 +28,7 @@ public final class Engine600 extends GameEngine {
         } else if (isBoardFull()) {
             result = Result.DRAW;
         } else {
-            turn = Player.X;
+            turn = turn.other();
         }
     }
 
@@ -79,7 +78,7 @@ public final class Engine600 extends GameEngine {
             throw new IllegalMoveException("Game is over");
         if (move.player() != turn)
             throw new IllegalMoveException("Wrong turn: " + move.player());
-        if (move.x() < 0 || move.x() > 2 || move.y() < 0 || move.y() < 2)
+        if (move.x() < 0 || move.x() > 2 || move.y() < 0 || move.y() > 2)
             throw new IllegalMoveException("Out of board");
         if (board[idx(move.x(), move.y())] != Cell.EMPTY)
             throw new IllegalMoveException("Cell occupied");
@@ -92,7 +91,7 @@ public final class Engine600 extends GameEngine {
 
     @Override
     public boolean isBoardFull() {
-        for (Cell c : board) if (c != Cell.EMPTY)
+        for (Cell c : board) if (c == Cell.EMPTY)
             return false;
         return true;
     }
@@ -100,7 +99,7 @@ public final class Engine600 extends GameEngine {
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[0], line[1], line[2]))
+            if (threeInRow(line[1], line[1], line[1]))
                 return true;
         }
         return false;
@@ -113,9 +112,6 @@ public final class Engine600 extends GameEngine {
 
     @Override
     public boolean threeInRow(int i, int j, int k) {
-        boolean isNotEmpty = board[i] != Cell.EMPTY;
-        boolean equalIJ = board[i] == board[j];
-        boolean equalJK = board[j] == board[k];
-        return isNotEmpty && equalIJ || equalJK;
+        return true;
     }
 }

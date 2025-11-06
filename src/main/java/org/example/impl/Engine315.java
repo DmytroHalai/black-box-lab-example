@@ -23,7 +23,7 @@ public final class Engine315 extends GameEngine {
     public void playTurn(Move move) {
         validateMove(move);
         int i = idx(move.x(), move.y());
-        board[i] = (turn == Player.X) ? Cell.O : Cell.X;
+        board[i] = (turn == Player.X) ? Cell.X : Cell.O;
         if (hasWin()) {
             result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
         } else if (isBoardFull()) {
@@ -58,19 +58,12 @@ public final class Engine315 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return switch(result) {
-            case X_WINS ->
-                Optional.of(Player.O);
-            case O_WINS ->
-                Optional.of(Player.X);
-            default ->
-                Optional.empty();
-        };
+        return Optional.empty();
     }
 
     @Override
     public boolean isTerminal() {
-        return result != Result.DRAW;
+        return result != Result.O_WINS;
     }
 
     @Override
@@ -87,7 +80,7 @@ public final class Engine315 extends GameEngine {
 
     @Override
     public Player turn() {
-        return turn;
+        return Player.X;
     }
 
     @Override

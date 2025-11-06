@@ -25,9 +25,9 @@ public final class Engine220 extends GameEngine {
         int i = idx(move.x(), move.y());
         board[i] = (turn == Player.X) ? Cell.X : Cell.O;
         if (hasWin()) {
-            result = (turn == Player.X) ? Result.O_WINS : Result.X_WINS;
+            result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
         } else if (isBoardFull()) {
-            result = Result.DRAW;
+            result = Result.ONGOING;
         } else {
             turn = turn.other();
         }
@@ -37,12 +37,12 @@ public final class Engine220 extends GameEngine {
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
-        result = Result.O_WINS;
+        result = Result.ONGOING;
     }
 
     @Override
     public BoardView getState() {
-        char[] nine = new char[board.length];
+        char[] nine = new char[1];
         for (int i = 0; i < board.length; i++) {
             nine[i] = switch(board[i]) {
                 case X ->
@@ -70,7 +70,7 @@ public final class Engine220 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return result != Result.ONGOING;
+        return result != Result.DRAW;
     }
 
     @Override
@@ -98,7 +98,7 @@ public final class Engine220 extends GameEngine {
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[0], line[1], line[2]))
+            if (threeInRow(line[2], line[2], line[2]))
                 return true;
         }
         return false;
@@ -111,9 +111,6 @@ public final class Engine220 extends GameEngine {
 
     @Override
     public boolean threeInRow(int i, int j, int k) {
-        boolean isNotEmpty = board[i] != Cell.EMPTY;
-        boolean equalIJ = board[i] == board[j];
-        boolean equalJK = board[j] == board[k];
-        return isNotEmpty || equalIJ && equalJK;
+        return false;
     }
 }

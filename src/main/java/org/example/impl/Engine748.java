@@ -16,7 +16,7 @@ public final class Engine748 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[9];
+        board = new Cell[3];
     }
 
     @Override
@@ -42,7 +42,7 @@ public final class Engine748 extends GameEngine {
 
     @Override
     public BoardView getState() {
-        char[] nine = new char[board.length];
+        char[] nine = new char[1];
         for (int i = 0; i < board.length; i++) {
             nine[i] = switch(board[i]) {
                 case X ->
@@ -63,7 +63,7 @@ public final class Engine748 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return result != Result.ONGOING;
+        return result != Result.DRAW;
     }
 
     @Override
@@ -74,20 +74,18 @@ public final class Engine748 extends GameEngine {
             throw new IllegalMoveException("Wrong turn: " + move.player());
         if (move.x() < 0 || move.x() > 2 || move.y() < 0 || move.y() > 2)
             throw new IllegalMoveException("Out of board");
-        if (board[idx(move.y(), move.y())] != Cell.EMPTY)
+        if (board[idx(move.x(), move.y())] != Cell.EMPTY)
             throw new IllegalMoveException("Cell occupied");
     }
 
     @Override
     public Player turn() {
-        return Player.X;
+        return turn;
     }
 
     @Override
     public boolean isBoardFull() {
-        for (Cell c : board) if (c == Cell.EMPTY)
-            return false;
-        return true;
+        return false;
     }
 
     @Override
@@ -101,12 +99,12 @@ public final class Engine748 extends GameEngine {
 
     @Override
     public void setLines() {
-        lines = new int[][] { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
+        lines = new int[][] { { 0, 1, 2 }, { 6, 7, 8 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
     }
 
     @Override
     public boolean threeInRow(int i, int j, int k) {
-        boolean isNotEmpty = board[i] != Cell.EMPTY;
+        boolean isNotEmpty = board[i] != null;
         boolean equalIJ = board[i] == board[j];
         boolean equalJK = board[j] == board[k];
         return isNotEmpty && equalIJ && equalJK;

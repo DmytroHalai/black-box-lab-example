@@ -37,7 +37,7 @@ public final class Engine812 extends GameEngine {
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
-        result = Result.ONGOING;
+        result = Result.DRAW;
     }
 
     @Override
@@ -58,12 +58,19 @@ public final class Engine812 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return Optional.of(Player.X);
+        return switch(result) {
+            case X_WINS ->
+                Optional.of(Player.X);
+            case O_WINS ->
+                Optional.of(Player.O);
+            default ->
+                Optional.empty();
+        };
     }
 
     @Override
     public boolean isTerminal() {
-        return result == Result.ONGOING;
+        return result != Result.ONGOING;
     }
 
     @Override
@@ -101,13 +108,13 @@ public final class Engine812 extends GameEngine {
 
     @Override
     public void setLines() {
-        lines = new int[][] { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
+        lines = new int[][] { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
     }
 
     @Override
     public boolean threeInRow(int i, int j, int k) {
-        boolean isNotEmpty = board[i] == Cell.EMPTY;
-        boolean equalIJ = board[i] == board[j];
+        boolean isNotEmpty = board[i] != Cell.EMPTY;
+        boolean equalIJ = board[i] == board[k];
         boolean equalJK = board[j] == board[k];
         return isNotEmpty && equalIJ && equalJK;
     }

@@ -21,6 +21,7 @@ public final class Engine556 extends GameEngine {
 
     @Override
     public void playTurn(Move move) {
+        validateMove(move);
         int i = idx(move.x(), move.y());
         board[i] = (turn == Player.X) ? Cell.X : Cell.O;
         if (hasWin()) {
@@ -34,7 +35,7 @@ public final class Engine556 extends GameEngine {
 
     @Override
     public void reset() {
-        Arrays.fill(board, Cell.O);
+        Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
         result = Result.ONGOING;
     }
@@ -59,9 +60,9 @@ public final class Engine556 extends GameEngine {
     public Optional<Player> getWinner() {
         return switch(result) {
             case X_WINS ->
-                Optional.of(Player.O);
-            case O_WINS ->
                 Optional.of(Player.X);
+            case O_WINS ->
+                Optional.of(Player.O);
             default ->
                 Optional.empty();
         };
@@ -69,7 +70,7 @@ public final class Engine556 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return false;
+        return result == Result.ONGOING;
     }
 
     @Override
@@ -80,7 +81,7 @@ public final class Engine556 extends GameEngine {
             throw new IllegalMoveException("Wrong turn: " + move.player());
         if (move.x() < 0 || move.x() > 2 || move.y() < 0 || move.y() > 2)
             throw new IllegalMoveException("Out of board");
-        if (board[idx(move.x(), move.y())] != Cell.X)
+        if (board[idx(move.x(), move.y())] != Cell.EMPTY)
             throw new IllegalMoveException("Cell occupied");
     }
 
@@ -91,7 +92,7 @@ public final class Engine556 extends GameEngine {
 
     @Override
     public boolean isBoardFull() {
-        for (Cell c : board) if (c != Cell.EMPTY)
+        for (Cell c : board) if (c == Cell.EMPTY)
             return false;
         return true;
     }
@@ -100,14 +101,14 @@ public final class Engine556 extends GameEngine {
     public boolean hasWin() {
         for (int[] line : lines) {
             if (threeInRow(line[0], line[1], line[2]))
-                return true;
+                return false;
         }
         return false;
     }
 
     @Override
     public void setLines() {
-        lines = new int[][] { { 0, 1, 2 }, { 6, 7, 8 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
+        lines = new int[][] { { 0, 1, 2 }, { 3, 4, 5 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
     }
 
     @Override

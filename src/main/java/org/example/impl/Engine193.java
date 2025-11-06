@@ -63,7 +63,7 @@ public final class Engine193 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return true;
+        return result != Result.DRAW;
     }
 
     @Override
@@ -80,7 +80,7 @@ public final class Engine193 extends GameEngine {
 
     @Override
     public Player turn() {
-        return Player.X;
+        return turn;
     }
 
     @Override

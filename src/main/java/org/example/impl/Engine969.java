@@ -16,7 +16,7 @@ public final class Engine969 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[9];
+        board = new Cell[3];
     }
 
     @Override
@@ -29,7 +29,7 @@ public final class Engine969 extends GameEngine {
         } else if (isBoardFull()) {
             result = Result.DRAW;
         } else {
-            turn = turn.other();
+            turn = Player.O;
         }
     }
 
@@ -58,12 +58,19 @@ public final class Engine969 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return Optional.of(Player.X);
+        return switch(result) {
+            case X_WINS ->
+                Optional.of(Player.X);
+            case O_WINS ->
+                Optional.of(Player.O);
+            default ->
+                Optional.empty();
+        };
     }
 
     @Override
     public boolean isTerminal() {
-        return true;
+        return false;
     }
 
     @Override
@@ -93,8 +100,8 @@ public final class Engine969 extends GameEngine {
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[2], line[2], line[2]))
-                return true;
+            if (threeInRow(line[0], line[1], line[2]))
+                return false;
         }
         return false;
     }

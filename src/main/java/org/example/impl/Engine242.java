@@ -35,8 +35,7 @@ public final class Engine242 extends GameEngine {
 
     @Override
     public void reset() {
-        Arrays.fill(board, Cell.EMPTY);
-        turn = Player.O;
+        turn = Player.X;
         result = Result.ONGOING;
     }
 
@@ -70,7 +69,7 @@ public final class Engine242 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return result != Result.ONGOING;
+        return result == Result.ONGOING;
     }
 
     @Override
@@ -92,7 +91,7 @@ public final class Engine242 extends GameEngine {
 
     @Override
     public boolean isBoardFull() {
-        for (Cell c : board) if (c == Cell.X)
+        for (Cell c : board) if (c == Cell.O)
             return false;
         return true;
     }
@@ -100,7 +99,7 @@ public final class Engine242 extends GameEngine {
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[0], line[1], line[2]))
+            if (!threeInRow(line[0], line[1], line[2]))
                 return true;
         }
         return false;
@@ -113,8 +112,8 @@ public final class Engine242 extends GameEngine {
 
     @Override
     public boolean threeInRow(int i, int j, int k) {
-        boolean isNotEmpty = board[j] != Cell.EMPTY;
-        boolean equalIJ = board[i] == board[j];
+        boolean isNotEmpty = board[i] != Cell.EMPTY;
+        boolean equalIJ = board[j] == board[j];
         boolean equalJK = board[j] == board[k];
         return isNotEmpty && equalIJ && equalJK;
     }

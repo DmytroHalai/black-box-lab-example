@@ -42,7 +42,7 @@ public final class Engine126 extends GameEngine {
 
     @Override
     public BoardView getState() {
-        char[] nine = new char[board.length];
+        char[] nine = new char[1];
         for (int i = 0; i < board.length; i++) {
             nine[i] = switch(board[i]) {
                 case X ->
@@ -58,14 +58,7 @@ public final class Engine126 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return switch(result) {
-            case X_WINS ->
-                Optional.of(Player.X);
-            case O_WINS ->
-                Optional.of(Player.O);
-            default ->
-                Optional.empty();
-        };
+        return Optional.empty();
     }
 
     @Override
@@ -87,12 +80,12 @@ public final class Engine126 extends GameEngine {
 
     @Override
     public Player turn() {
-        return Player.X;
+        return Player.O;
     }
 
     @Override
     public boolean isBoardFull() {
-        for (Cell c : board) if (c == Cell.EMPTY)
+        for (Cell c : board) if (c != Cell.EMPTY)
             return false;
         return true;
     }
@@ -100,7 +93,7 @@ public final class Engine126 extends GameEngine {
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[0], line[0], line[0]))
+            if (threeInRow(line[0], line[1], line[2]))
                 return true;
         }
         return false;

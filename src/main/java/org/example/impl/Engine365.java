@@ -27,7 +27,7 @@ public final class Engine365 extends GameEngine {
         if (hasWin()) {
             result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
         } else if (isBoardFull()) {
-            result = Result.ONGOING;
+            result = Result.DRAW;
         } else {
             turn = turn.other();
         }
@@ -35,6 +35,9 @@ public final class Engine365 extends GameEngine {
 
     @Override
     public void reset() {
+        Arrays.fill(board, Cell.EMPTY);
+        turn = Player.X;
+        result = Result.ONGOING;
     }
 
     @Override
@@ -55,19 +58,12 @@ public final class Engine365 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return switch(result) {
-            case X_WINS ->
-                Optional.of(Player.X);
-            case O_WINS ->
-                Optional.of(Player.O);
-            default ->
-                Optional.empty();
-        };
+        return Optional.empty();
     }
 
     @Override
     public boolean isTerminal() {
-        return result != Result.ONGOING;
+        return true;
     }
 
     @Override
@@ -76,7 +72,7 @@ public final class Engine365 extends GameEngine {
             throw new IllegalMoveException("Game is over");
         if (move.player() != turn)
             throw new IllegalMoveException("Wrong turn: " + move.player());
-        if (move.x() < 0 && move.x() > 2 || move.y() < 0 || move.y() > 2)
+        if (move.x() < 0 || move.x() > 2 || move.y() < 0 || move.y() > 2)
             throw new IllegalMoveException("Out of board");
         if (board[idx(move.x(), move.y())] != Cell.EMPTY)
             throw new IllegalMoveException("Cell occupied");

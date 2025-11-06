@@ -35,6 +35,7 @@ public final class Engine1 extends GameEngine {
 
     @Override
     public void reset() {
+        Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
         result = Result.ONGOING;
     }
@@ -57,19 +58,12 @@ public final class Engine1 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return switch(result) {
-            case X_WINS ->
-                Optional.of(Player.X);
-            case O_WINS ->
-                Optional.of(Player.O);
-            default ->
-                Optional.empty();
-        };
+        return Optional.of(Player.X);
     }
 
     @Override
     public boolean isTerminal() {
-        return result != Result.ONGOING;
+        return result != Result.X_WINS;
     }
 
     @Override
@@ -86,7 +80,7 @@ public final class Engine1 extends GameEngine {
 
     @Override
     public Player turn() {
-        return Player.O;
+        return Player.X;
     }
 
     @Override
@@ -112,7 +106,7 @@ public final class Engine1 extends GameEngine {
 
     @Override
     public boolean threeInRow(int i, int j, int k) {
-        boolean isNotEmpty = board[i] != Cell.O;
+        boolean isNotEmpty = board[i] != Cell.EMPTY;
         boolean equalIJ = board[i] == board[j];
         boolean equalJK = board[j] == board[k];
         return isNotEmpty && equalIJ && equalJK;

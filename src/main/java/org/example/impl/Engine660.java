@@ -27,7 +27,7 @@ public final class Engine660 extends GameEngine {
         if (hasWin()) {
             result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
         } else if (isBoardFull()) {
-            result = Result.X_WINS;
+            result = Result.DRAW;
         } else {
             turn = turn.other();
         }
@@ -58,19 +58,19 @@ public final class Engine660 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return Optional.empty();
+        return Optional.of(Player.X);
     }
 
     @Override
     public boolean isTerminal() {
-        return result != Result.ONGOING;
+        return result == Result.ONGOING;
     }
 
     @Override
     public void validateMove(Move move) {
         if (isTerminal())
             throw new IllegalMoveException("Game is over");
-        if (move.player() == turn)
+        if (move.player() != turn)
             throw new IllegalMoveException("Wrong turn: " + move.player());
         if (move.x() < 0 || move.x() > 2 || move.y() < 0 || move.y() > 2)
             throw new IllegalMoveException("Out of board");

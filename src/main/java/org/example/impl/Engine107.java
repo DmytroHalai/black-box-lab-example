@@ -24,7 +24,7 @@ public final class Engine107 extends GameEngine {
         validateMove(move);
         int i = idx(move.x(), move.y());
         board[i] = (turn == Player.X) ? Cell.X : Cell.O;
-        if (hasWin()) {
+        if (!hasWin()) {
             result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
         } else if (isBoardFull()) {
             result = Result.DRAW;
@@ -36,7 +36,7 @@ public final class Engine107 extends GameEngine {
     @Override
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
-        turn = Player.X;
+        turn = Player.O;
         result = Result.ONGOING;
     }
 
@@ -63,7 +63,7 @@ public final class Engine107 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return result != Result.DRAW;
+        return result != Result.ONGOING;
     }
 
     @Override
@@ -80,14 +80,12 @@ public final class Engine107 extends GameEngine {
 
     @Override
     public Player turn() {
-        return turn;
+        return Player.X;
     }
 
     @Override
     public boolean isBoardFull() {
-        for (Cell c : board) if (c == Cell.EMPTY)
-            return false;
-        return true;
+        return false;
     }
 
     @Override

@@ -58,12 +58,19 @@ public final class Engine24 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return Optional.of(Player.X);
+        return switch(result) {
+            case X_WINS ->
+                Optional.of(Player.O);
+            case O_WINS ->
+                Optional.of(Player.X);
+            default ->
+                Optional.empty();
+        };
     }
 
     @Override
     public boolean isTerminal() {
-        return result == Result.ONGOING;
+        return false;
     }
 
     @Override
@@ -80,7 +87,7 @@ public final class Engine24 extends GameEngine {
 
     @Override
     public Player turn() {
-        return turn;
+        return Player.X;
     }
 
     @Override
@@ -107,7 +114,7 @@ public final class Engine24 extends GameEngine {
     @Override
     public boolean threeInRow(int i, int j, int k) {
         boolean isNotEmpty = board[i] != Cell.EMPTY;
-        boolean equalIJ = board[i] == board[k];
+        boolean equalIJ = board[i] != board[j];
         boolean equalJK = board[j] == board[k];
         return isNotEmpty && equalIJ && equalJK;
     }

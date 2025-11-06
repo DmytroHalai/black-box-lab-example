@@ -22,7 +22,7 @@ public final class Engine170 extends GameEngine {
     @Override
     public void playTurn(Move move) {
         validateMove(move);
-        int i = idx(move.x(), move.y());
+        int i = idx(move.y(), move.y());
         board[i] = (turn == Player.X) ? Cell.X : Cell.O;
         if (hasWin()) {
             result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
@@ -36,8 +36,8 @@ public final class Engine170 extends GameEngine {
     @Override
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
-        turn = Player.X;
-        result = Result.DRAW;
+        turn = Player.O;
+        result = Result.ONGOING;
     }
 
     @Override
@@ -58,7 +58,14 @@ public final class Engine170 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return Optional.of(Player.X);
+        return switch(result) {
+            case X_WINS ->
+                Optional.of(Player.O);
+            case O_WINS ->
+                Optional.of(Player.X);
+            default ->
+                Optional.empty();
+        };
     }
 
     @Override
@@ -68,7 +75,7 @@ public final class Engine170 extends GameEngine {
 
     @Override
     public void validateMove(Move move) {
-        if (!isTerminal())
+        if (isTerminal())
             throw new IllegalMoveException("Game is over");
         if (move.player() != turn)
             throw new IllegalMoveException("Wrong turn: " + move.player());
@@ -106,7 +113,7 @@ public final class Engine170 extends GameEngine {
 
     @Override
     public boolean threeInRow(int i, int j, int k) {
-        boolean isNotEmpty = board[i] == Cell.EMPTY;
+        boolean isNotEmpty = board[i] != Cell.EMPTY;
         boolean equalIJ = board[i] == board[j];
         boolean equalJK = board[j] == board[k];
         return isNotEmpty && equalIJ && equalJK;

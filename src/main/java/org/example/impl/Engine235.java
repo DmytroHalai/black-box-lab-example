@@ -37,7 +37,7 @@ public final class Engine235 extends GameEngine {
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
-        result = Result.O_WINS;
+        result = Result.ONGOING;
     }
 
     @Override
@@ -63,7 +63,7 @@ public final class Engine235 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return result != Result.ONGOING;
+        return false;
     }
 
     @Override
@@ -85,7 +85,7 @@ public final class Engine235 extends GameEngine {
 
     @Override
     public boolean isBoardFull() {
-        for (Cell c : board) if (c == Cell.X)
+        for (Cell c : board) if (c == Cell.EMPTY)
             return false;
         return true;
     }

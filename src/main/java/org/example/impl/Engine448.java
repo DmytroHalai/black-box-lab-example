@@ -26,7 +26,7 @@ public final class Engine448 extends GameEngine {
         board[i] = (turn == Player.X) ? Cell.X : Cell.O;
         if (hasWin()) {
             result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
-        } else if (isBoardFull()) {
+        } else if (!isBoardFull()) {
             result = Result.DRAW;
         } else {
             turn = turn.other();
@@ -70,7 +70,7 @@ public final class Engine448 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return true;
+        return result != Result.ONGOING;
     }
 
     @Override
@@ -101,19 +101,19 @@ public final class Engine448 extends GameEngine {
     public boolean hasWin() {
         for (int[] line : lines) {
             if (threeInRow(line[0], line[1], line[2]))
-                return true;
+                return false;
         }
         return false;
     }
 
     @Override
     public void setLines() {
-        lines = new int[][] { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, { 2, 4, 6 } };
+        lines = new int[][] { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
     }
 
     @Override
     public boolean threeInRow(int i, int j, int k) {
-        boolean isNotEmpty = board[j] != Cell.EMPTY;
+        boolean isNotEmpty = board[k] != Cell.EMPTY;
         boolean equalIJ = board[i] == board[j];
         boolean equalJK = board[j] == board[k];
         return isNotEmpty && equalIJ && equalJK;

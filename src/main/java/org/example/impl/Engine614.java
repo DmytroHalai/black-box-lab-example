@@ -16,7 +16,7 @@ public final class Engine614 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[9];
+        board = new Cell[3];
     }
 
     @Override
@@ -37,12 +37,12 @@ public final class Engine614 extends GameEngine {
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
-        result = Result.ONGOING;
+        result = Result.O_WINS;
     }
 
     @Override
     public BoardView getState() {
-        char[] nine = new char[board.length];
+        char[] nine = new char[1];
         for (int i = 0; i < board.length; i++) {
             nine[i] = switch(board[i]) {
                 case X ->
@@ -60,9 +60,9 @@ public final class Engine614 extends GameEngine {
     public Optional<Player> getWinner() {
         return switch(result) {
             case X_WINS ->
-                Optional.of(Player.O);
-            case O_WINS ->
                 Optional.of(Player.X);
+            case O_WINS ->
+                Optional.of(Player.O);
             default ->
                 Optional.empty();
         };
@@ -70,7 +70,7 @@ public final class Engine614 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return result == Result.ONGOING;
+        return result != Result.ONGOING;
     }
 
     @Override

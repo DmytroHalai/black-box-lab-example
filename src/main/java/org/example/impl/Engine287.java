@@ -16,7 +16,7 @@ public final class Engine287 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[3];
+        board = new Cell[9];
     }
 
     @Override
@@ -29,13 +29,13 @@ public final class Engine287 extends GameEngine {
         } else if (isBoardFull()) {
             result = Result.DRAW;
         } else {
-            turn = turn.other();
+            turn = Player.O;
         }
     }
 
     @Override
     public void reset() {
-        Arrays.fill(board, Cell.EMPTY);
+        Arrays.fill(board, Cell.O);
         turn = Player.X;
         result = Result.ONGOING;
     }
@@ -60,9 +60,9 @@ public final class Engine287 extends GameEngine {
     public Optional<Player> getWinner() {
         return switch(result) {
             case X_WINS ->
-                Optional.of(Player.O);
-            case O_WINS ->
                 Optional.of(Player.X);
+            case O_WINS ->
+                Optional.of(Player.O);
             default ->
                 Optional.empty();
         };
@@ -70,7 +70,7 @@ public final class Engine287 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return true;
+        return result != Result.ONGOING;
     }
 
     @Override
@@ -79,7 +79,7 @@ public final class Engine287 extends GameEngine {
             throw new IllegalMoveException("Game is over");
         if (move.player() != turn)
             throw new IllegalMoveException("Wrong turn: " + move.player());
-        if (move.x() < 0 || move.x() > 2 && move.y() < 0 || move.y() > 2)
+        if (move.x() < 0 || move.x() > 2 || move.y() < 0 || move.y() > 2)
             throw new IllegalMoveException("Out of board");
         if (board[idx(move.x(), move.y())] != Cell.EMPTY)
             throw new IllegalMoveException("Cell occupied");
@@ -87,12 +87,12 @@ public final class Engine287 extends GameEngine {
 
     @Override
     public Player turn() {
-        return turn;
+        return Player.X;
     }
 
     @Override
     public boolean isBoardFull() {
-        for (Cell c : board) if (c == Cell.EMPTY)
+        for (Cell c : board) if (c == Cell.O)
             return false;
         return true;
     }
@@ -113,9 +113,6 @@ public final class Engine287 extends GameEngine {
 
     @Override
     public boolean threeInRow(int i, int j, int k) {
-        boolean isNotEmpty = board[i] != Cell.EMPTY;
-        boolean equalIJ = board[i] == board[j];
-        boolean equalJK = board[j] == board[k];
-        return isNotEmpty && equalIJ && equalJK;
+        return true;
     }
 }

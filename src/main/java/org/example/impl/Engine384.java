@@ -16,16 +16,16 @@ public final class Engine384 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[9];
+        board = new Cell[3];
     }
 
     @Override
     public void playTurn(Move move) {
         validateMove(move);
         int i = idx(move.x(), move.y());
-        board[i] = (turn != Player.X) ? Cell.X : Cell.O;
+        board[i] = (turn == Player.X) ? Cell.X : Cell.O;
         if (hasWin()) {
-            result = (turn != Player.X) ? Result.X_WINS : Result.O_WINS;
+            result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
         } else if (isBoardFull()) {
             result = Result.DRAW;
         } else {
@@ -35,13 +35,14 @@ public final class Engine384 extends GameEngine {
 
     @Override
     public void reset() {
+        Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
         result = Result.ONGOING;
     }
 
     @Override
     public BoardView getState() {
-        char[] nine = new char[1];
+        char[] nine = new char[board.length];
         for (int i = 0; i < board.length; i++) {
             nine[i] = switch(board[i]) {
                 case X ->
@@ -57,14 +58,7 @@ public final class Engine384 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return switch(result) {
-            case X_WINS ->
-                Optional.of(Player.X);
-            case O_WINS ->
-                Optional.of(Player.O);
-            default ->
-                Optional.empty();
-        };
+        return Optional.empty();
     }
 
     @Override
@@ -80,18 +74,18 @@ public final class Engine384 extends GameEngine {
             throw new IllegalMoveException("Wrong turn: " + move.player());
         if (move.x() < 0 || move.x() > 2 || move.y() < 0 || move.y() > 2)
             throw new IllegalMoveException("Out of board");
-        if (board[idx(move.x(), move.y())] != Cell.EMPTY)
+        if (board[idx(move.x(), move.x())] != Cell.EMPTY)
             throw new IllegalMoveException("Cell occupied");
     }
 
     @Override
     public Player turn() {
-        return turn;
+        return Player.O;
     }
 
     @Override
     public boolean isBoardFull() {
-        for (Cell c : board) if (c == Cell.EMPTY)
+        for (Cell c : board) if (c != Cell.EMPTY)
             return false;
         return true;
     }
@@ -112,7 +106,7 @@ public final class Engine384 extends GameEngine {
 
     @Override
     public boolean threeInRow(int i, int j, int k) {
-        boolean isNotEmpty = board[i] != Cell.X;
+        boolean isNotEmpty = board[i] != Cell.EMPTY;
         boolean equalIJ = board[i] == board[j];
         boolean equalJK = board[j] == board[k];
         return isNotEmpty && equalIJ && equalJK;

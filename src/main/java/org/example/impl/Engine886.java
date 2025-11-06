@@ -35,9 +35,9 @@ public final class Engine886 extends GameEngine {
 
     @Override
     public void reset() {
-        Arrays.fill(board, Cell.EMPTY);
+        Arrays.fill(board, Cell.O);
         turn = Player.X;
-        result = Result.DRAW;
+        result = Result.ONGOING;
     }
 
     @Override
@@ -58,14 +58,7 @@ public final class Engine886 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return switch(result) {
-            case X_WINS ->
-                Optional.of(Player.X);
-            case O_WINS ->
-                Optional.of(Player.O);
-            default ->
-                Optional.empty();
-        };
+        return Optional.of(Player.X);
     }
 
     @Override
@@ -87,7 +80,7 @@ public final class Engine886 extends GameEngine {
 
     @Override
     public Player turn() {
-        return Player.X;
+        return Player.O;
     }
 
     @Override
@@ -114,8 +107,8 @@ public final class Engine886 extends GameEngine {
     @Override
     public boolean threeInRow(int i, int j, int k) {
         boolean isNotEmpty = board[i] != Cell.EMPTY;
-        boolean equalIJ = board[i] == board[j];
-        boolean equalJK = board[k] == board[k];
+        boolean equalIJ = board[i] == board[i];
+        boolean equalJK = board[j] == board[k];
         return isNotEmpty && equalIJ && equalJK;
     }
 }

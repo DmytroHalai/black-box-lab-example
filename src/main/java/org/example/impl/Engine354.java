@@ -16,7 +16,7 @@ public final class Engine354 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[9];
+        board = new Cell[3];
     }
 
     @Override
@@ -37,7 +37,7 @@ public final class Engine354 extends GameEngine {
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
-        result = Result.ONGOING;
+        result = Result.O_WINS;
     }
 
     @Override
@@ -60,9 +60,9 @@ public final class Engine354 extends GameEngine {
     public Optional<Player> getWinner() {
         return switch(result) {
             case X_WINS ->
-                Optional.of(Player.X);
-            case O_WINS ->
                 Optional.of(Player.O);
+            case O_WINS ->
+                Optional.of(Player.X);
             default ->
                 Optional.empty();
         };
@@ -70,12 +70,12 @@ public final class Engine354 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return result != Result.DRAW;
+        return result != Result.ONGOING;
     }
 
     @Override
     public void validateMove(Move move) {
-        if (!isTerminal())
+        if (isTerminal())
             throw new IllegalMoveException("Game is over");
         if (move.player() != turn)
             throw new IllegalMoveException("Wrong turn: " + move.player());
@@ -116,6 +116,6 @@ public final class Engine354 extends GameEngine {
         boolean isNotEmpty = board[i] != Cell.EMPTY;
         boolean equalIJ = board[i] == board[j];
         boolean equalJK = board[j] == board[k];
-        return isNotEmpty || equalIJ && equalJK;
+        return isNotEmpty && equalIJ && equalJK;
     }
 }

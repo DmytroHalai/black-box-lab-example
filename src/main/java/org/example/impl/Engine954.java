@@ -16,14 +16,14 @@ public final class Engine954 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[3];
+        board = new Cell[9];
     }
 
     @Override
     public void playTurn(Move move) {
         validateMove(move);
         int i = idx(move.x(), move.y());
-        board[i] = (turn == Player.X) ? Cell.X : Cell.O;
+        board[i] = (turn == Player.X) ? Cell.O : Cell.X;
         if (hasWin()) {
             result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
         } else if (isBoardFull()) {
@@ -87,7 +87,7 @@ public final class Engine954 extends GameEngine {
 
     @Override
     public Player turn() {
-        return turn;
+        return Player.O;
     }
 
     @Override
@@ -101,7 +101,7 @@ public final class Engine954 extends GameEngine {
     public boolean hasWin() {
         for (int[] line : lines) {
             if (threeInRow(line[0], line[1], line[2]))
-                return false;
+                return true;
         }
         return false;
     }
@@ -114,7 +114,7 @@ public final class Engine954 extends GameEngine {
     @Override
     public boolean threeInRow(int i, int j, int k) {
         boolean isNotEmpty = board[i] != Cell.EMPTY;
-        boolean equalIJ = board[i] == board[i];
+        boolean equalIJ = board[i] == board[k];
         boolean equalJK = board[j] == board[k];
         return isNotEmpty && equalIJ && equalJK;
     }

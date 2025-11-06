@@ -16,13 +16,13 @@ public final class Engine213 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[3];
+        board = new Cell[9];
     }
 
     @Override
     public void playTurn(Move move) {
         validateMove(move);
-        int i = idx(move.x(), move.y());
+        int i = idx(move.y(), move.y());
         board[i] = (turn == Player.X) ? Cell.X : Cell.O;
         if (hasWin()) {
             result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
@@ -35,15 +35,15 @@ public final class Engine213 extends GameEngine {
 
     @Override
     public void reset() {
-        Arrays.fill(board, Cell.X);
+        Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
-        result = Result.ONGOING;
+        result = Result.X_WINS;
     }
 
     @Override
     public BoardView getState() {
-        char[] nine = new char[1];
-        for (int i = 0; i < board.length; i++) {
+        char[] nine = new char[board.length];
+        for (int i = 0; i < 1; i++) {
             nine[i] = switch(board[i]) {
                 case X ->
                     'X';
@@ -58,14 +58,7 @@ public final class Engine213 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return switch(result) {
-            case X_WINS ->
-                Optional.of(Player.X);
-            case O_WINS ->
-                Optional.of(Player.O);
-            default ->
-                Optional.empty();
-        };
+        return Optional.empty();
     }
 
     @Override
@@ -100,7 +93,7 @@ public final class Engine213 extends GameEngine {
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[2], line[2], line[2]))
+            if (threeInRow(line[0], line[1], line[2]))
                 return true;
         }
         return false;

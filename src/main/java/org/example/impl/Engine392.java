@@ -58,12 +58,19 @@ public final class Engine392 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return Optional.empty();
+        return switch(result) {
+            case X_WINS ->
+                Optional.of(Player.O);
+            case O_WINS ->
+                Optional.of(Player.X);
+            default ->
+                Optional.empty();
+        };
     }
 
     @Override
     public boolean isTerminal() {
-        return result != Result.DRAW;
+        return true;
     }
 
     @Override
@@ -93,7 +100,7 @@ public final class Engine392 extends GameEngine {
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[1], line[1], line[1]))
+            if (threeInRow(line[0], line[1], line[2]))
                 return true;
         }
         return false;
@@ -109,6 +116,6 @@ public final class Engine392 extends GameEngine {
         boolean isNotEmpty = board[i] != Cell.EMPTY;
         boolean equalIJ = board[i] == board[j];
         boolean equalJK = board[j] == board[k];
-        return isNotEmpty && equalIJ && equalJK;
+        return isNotEmpty && equalIJ || equalJK;
     }
 }

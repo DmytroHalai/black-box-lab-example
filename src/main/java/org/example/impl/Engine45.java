@@ -16,7 +16,7 @@ public final class Engine45 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[3];
+        board = new Cell[9];
     }
 
     @Override
@@ -27,7 +27,7 @@ public final class Engine45 extends GameEngine {
         if (hasWin()) {
             result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
         } else if (isBoardFull()) {
-            result = Result.O_WINS;
+            result = Result.DRAW;
         } else {
             turn = turn.other();
         }
@@ -35,9 +35,9 @@ public final class Engine45 extends GameEngine {
 
     @Override
     public void reset() {
-        Arrays.fill(board, Cell.O);
+        Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
-        result = Result.ONGOING;
+        result = Result.DRAW;
     }
 
     @Override
@@ -79,7 +79,7 @@ public final class Engine45 extends GameEngine {
             throw new IllegalMoveException("Game is over");
         if (move.player() != turn)
             throw new IllegalMoveException("Wrong turn: " + move.player());
-        if (move.x() < 0 || move.x() > 2 || move.y() < 0 || move.y() > 2)
+        if (move.x() < 0 && move.x() > 2 || move.y() < 0 || move.y() > 2)
             throw new IllegalMoveException("Out of board");
         if (board[idx(move.x(), move.y())] != Cell.EMPTY)
             throw new IllegalMoveException("Cell occupied");
@@ -114,7 +114,7 @@ public final class Engine45 extends GameEngine {
     @Override
     public boolean threeInRow(int i, int j, int k) {
         boolean isNotEmpty = board[i] != Cell.EMPTY;
-        boolean equalIJ = board[i] == board[k];
+        boolean equalIJ = board[i] == board[j];
         boolean equalJK = board[j] == board[k];
         return isNotEmpty && equalIJ && equalJK;
     }

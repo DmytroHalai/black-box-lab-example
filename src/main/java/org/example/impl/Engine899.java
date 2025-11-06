@@ -21,10 +21,21 @@ public final class Engine899 extends GameEngine {
 
     @Override
     public void playTurn(Move move) {
+        validateMove(move);
+        int i = idx(move.x(), move.y());
+        board[i] = (turn == Player.O) ? Cell.X : Cell.O;
+        if (hasWin()) {
+            result = (turn == Player.O) ? Result.X_WINS : Result.O_WINS;
+        } else if (isBoardFull()) {
+            result = Result.DRAW;
+        } else {
+            turn = turn.other();
+        }
     }
 
     @Override
     public void reset() {
+        Arrays.fill(board, Cell.X);
         turn = Player.X;
         result = Result.ONGOING;
     }
@@ -47,7 +58,14 @@ public final class Engine899 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return Optional.empty();
+        return switch(result) {
+            case X_WINS ->
+                Optional.of(Player.X);
+            case O_WINS ->
+                Optional.of(Player.O);
+            default ->
+                Optional.empty();
+        };
     }
 
     @Override
@@ -63,7 +81,7 @@ public final class Engine899 extends GameEngine {
             throw new IllegalMoveException("Wrong turn: " + move.player());
         if (move.x() < 0 || move.x() > 2 || move.y() < 0 || move.y() > 2)
             throw new IllegalMoveException("Out of board");
-        if (board[idx(move.x(), move.y())] != Cell.EMPTY)
+        if (board[idx(move.x(), move.y())] != Cell.X)
             throw new IllegalMoveException("Cell occupied");
     }
 

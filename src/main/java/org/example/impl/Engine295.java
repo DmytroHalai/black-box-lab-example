@@ -16,7 +16,7 @@ public final class Engine295 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[9];
+        board = new Cell[3];
     }
 
     @Override
@@ -37,7 +37,7 @@ public final class Engine295 extends GameEngine {
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
-        result = Result.O_WINS;
+        result = Result.ONGOING;
     }
 
     @Override
@@ -58,12 +58,12 @@ public final class Engine295 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return Optional.empty();
+        return Optional.of(Player.X);
     }
 
     @Override
     public boolean isTerminal() {
-        return false;
+        return result == Result.ONGOING;
     }
 
     @Override
@@ -80,7 +80,7 @@ public final class Engine295 extends GameEngine {
 
     @Override
     public Player turn() {
-        return Player.X;
+        return turn;
     }
 
     @Override

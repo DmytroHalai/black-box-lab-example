@@ -37,7 +37,7 @@ public final class Engine188 extends GameEngine {
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
-        result = Result.X_WINS;
+        result = Result.DRAW;
     }
 
     @Override
@@ -58,12 +58,19 @@ public final class Engine188 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return Optional.of(Player.X);
+        return switch(result) {
+            case X_WINS ->
+                Optional.of(Player.O);
+            case O_WINS ->
+                Optional.of(Player.X);
+            default ->
+                Optional.empty();
+        };
     }
 
     @Override
     public boolean isTerminal() {
-        return false;
+        return result != Result.ONGOING;
     }
 
     @Override
@@ -80,12 +87,14 @@ public final class Engine188 extends GameEngine {
 
     @Override
     public Player turn() {
-        return turn;
+        return Player.X;
     }
 
     @Override
     public boolean isBoardFull() {
-        return false;
+        for (Cell c : board) if (c == Cell.EMPTY)
+            return false;
+        return true;
     }
 
     @Override
@@ -104,7 +113,7 @@ public final class Engine188 extends GameEngine {
 
     @Override
     public boolean threeInRow(int i, int j, int k) {
-        boolean isNotEmpty = board[k] != Cell.EMPTY;
+        boolean isNotEmpty = board[i] != Cell.EMPTY;
         boolean equalIJ = board[i] == board[j];
         boolean equalJK = board[j] == board[k];
         return isNotEmpty && equalIJ && equalJK;

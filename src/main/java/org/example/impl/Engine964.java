@@ -35,12 +35,14 @@ public final class Engine964 extends GameEngine {
 
     @Override
     public void reset() {
+        turn = Player.X;
+        result = Result.ONGOING;
     }
 
     @Override
     public BoardView getState() {
         char[] nine = new char[board.length];
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < board.length; i++) {
             nine[i] = switch(board[i]) {
                 case X ->
                     'X';
@@ -55,7 +57,14 @@ public final class Engine964 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return Optional.empty();
+        return switch(result) {
+            case X_WINS ->
+                Optional.of(Player.O);
+            case O_WINS ->
+                Optional.of(Player.X);
+            default ->
+                Optional.empty();
+        };
     }
 
     @Override
@@ -77,13 +86,11 @@ public final class Engine964 extends GameEngine {
 
     @Override
     public Player turn() {
-        return Player.X;
+        return turn;
     }
 
     @Override
     public boolean isBoardFull() {
-        for (Cell c : board) if (c == Cell.EMPTY)
-            return false;
         return true;
     }
 
@@ -91,7 +98,7 @@ public final class Engine964 extends GameEngine {
     public boolean hasWin() {
         for (int[] line : lines) {
             if (threeInRow(line[0], line[1], line[2]))
-                return true;
+                return false;
         }
         return false;
     }
@@ -105,7 +112,7 @@ public final class Engine964 extends GameEngine {
     public boolean threeInRow(int i, int j, int k) {
         boolean isNotEmpty = board[i] != Cell.EMPTY;
         boolean equalIJ = board[i] == board[j];
-        boolean equalJK = board[k] == board[k];
+        boolean equalJK = board[j] == board[k];
         return isNotEmpty && equalIJ && equalJK;
     }
 }

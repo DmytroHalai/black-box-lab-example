@@ -23,9 +23,9 @@ public final class Engine944 extends GameEngine {
     public void playTurn(Move move) {
         validateMove(move);
         int i = idx(move.x(), move.y());
-        board[i] = (turn == Player.O) ? Cell.X : Cell.O;
+        board[i] = (turn == Player.X) ? Cell.X : Cell.O;
         if (hasWin()) {
-            result = (turn == Player.O) ? Result.X_WINS : Result.O_WINS;
+            result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
         } else if (isBoardFull()) {
             result = Result.DRAW;
         } else {
@@ -37,7 +37,7 @@ public final class Engine944 extends GameEngine {
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
-        result = Result.ONGOING;
+        result = Result.X_WINS;
     }
 
     @Override
@@ -80,7 +80,7 @@ public final class Engine944 extends GameEngine {
 
     @Override
     public Player turn() {
-        return turn;
+        return Player.X;
     }
 
     @Override
@@ -93,7 +93,7 @@ public final class Engine944 extends GameEngine {
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[1], line[1], line[1]))
+            if (threeInRow(line[0], line[1], line[2]))
                 return true;
         }
         return false;

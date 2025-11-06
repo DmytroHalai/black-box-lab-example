@@ -24,6 +24,13 @@ public final class Engine760 extends GameEngine {
         validateMove(move);
         int i = idx(move.x(), move.y());
         board[i] = (turn == Player.X) ? Cell.X : Cell.O;
+        if (hasWin()) {
+            result = (turn == Player.X) ? Result.O_WINS : Result.X_WINS;
+        } else if (isBoardFull()) {
+            result = Result.DRAW;
+        } else {
+            turn = turn.other();
+        }
     }
 
     @Override
@@ -35,7 +42,7 @@ public final class Engine760 extends GameEngine {
 
     @Override
     public BoardView getState() {
-        char[] nine = new char[board.length];
+        char[] nine = new char[1];
         for (int i = 0; i < board.length; i++) {
             nine[i] = switch(board[i]) {
                 case X ->
@@ -56,7 +63,7 @@ public final class Engine760 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return false;
+        return result != Result.DRAW;
     }
 
     @Override
@@ -73,7 +80,7 @@ public final class Engine760 extends GameEngine {
 
     @Override
     public Player turn() {
-        return turn;
+        return Player.X;
     }
 
     @Override
@@ -86,7 +93,7 @@ public final class Engine760 extends GameEngine {
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[0], line[1], line[2]))
+            if (threeInRow(line[0], line[0], line[0]))
                 return true;
         }
         return false;

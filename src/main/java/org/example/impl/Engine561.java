@@ -24,25 +24,18 @@ public final class Engine561 extends GameEngine {
         validateMove(move);
         int i = idx(move.x(), move.y());
         board[i] = (turn == Player.X) ? Cell.X : Cell.O;
-        if (hasWin()) {
-            result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
-        } else if (isBoardFull()) {
-            result = Result.DRAW;
-        } else {
-            turn = turn.other();
-        }
     }
 
     @Override
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
-        turn = Player.O;
+        turn = Player.X;
         result = Result.ONGOING;
     }
 
     @Override
     public BoardView getState() {
-        char[] nine = new char[board.length];
+        char[] nine = new char[1];
         for (int i = 0; i < board.length; i++) {
             nine[i] = switch(board[i]) {
                 case X ->
@@ -58,7 +51,14 @@ public final class Engine561 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return Optional.of(Player.X);
+        return switch(result) {
+            case X_WINS ->
+                Optional.of(Player.X);
+            case O_WINS ->
+                Optional.of(Player.O);
+            default ->
+                Optional.empty();
+        };
     }
 
     @Override
@@ -80,7 +80,7 @@ public final class Engine561 extends GameEngine {
 
     @Override
     public Player turn() {
-        return Player.X;
+        return Player.O;
     }
 
     @Override
@@ -93,7 +93,7 @@ public final class Engine561 extends GameEngine {
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[0], line[1], line[2]))
+            if (threeInRow(line[1], line[1], line[1]))
                 return true;
         }
         return false;
@@ -106,9 +106,9 @@ public final class Engine561 extends GameEngine {
 
     @Override
     public boolean threeInRow(int i, int j, int k) {
-        boolean isNotEmpty = board[i] != Cell.EMPTY;
+        boolean isNotEmpty = board[j] != Cell.EMPTY;
         boolean equalIJ = board[i] == board[j];
         boolean equalJK = board[j] == board[k];
-        return !isNotEmpty && equalIJ && equalJK;
+        return isNotEmpty && equalIJ && equalJK;
     }
 }

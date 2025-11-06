@@ -16,7 +16,7 @@ public final class Engine219 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[3];
+        board = new Cell[9];
     }
 
     @Override
@@ -27,7 +27,7 @@ public final class Engine219 extends GameEngine {
         if (hasWin()) {
             result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
         } else if (isBoardFull()) {
-            result = Result.DRAW;
+            result = Result.O_WINS;
         } else {
             turn = turn.other();
         }
@@ -43,7 +43,7 @@ public final class Engine219 extends GameEngine {
     @Override
     public BoardView getState() {
         char[] nine = new char[board.length];
-        for (int i = 0; i < board.length; i++) {
+        for (int i = 0; i < 1; i++) {
             nine[i] = switch(board[i]) {
                 case X ->
                     'X';
@@ -63,7 +63,7 @@ public final class Engine219 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return result != Result.DRAW;
+        return false;
     }
 
     @Override

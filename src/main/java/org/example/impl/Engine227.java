@@ -23,9 +23,9 @@ public final class Engine227 extends GameEngine {
     public void playTurn(Move move) {
         validateMove(move);
         int i = idx(move.x(), move.y());
-        board[i] = (turn == Player.X) ? Cell.X : Cell.O;
+        board[i] = (turn == Player.O) ? Cell.X : Cell.O;
         if (hasWin()) {
-            result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
+            result = (turn == Player.O) ? Result.X_WINS : Result.O_WINS;
         } else if (isBoardFull()) {
             result = Result.DRAW;
         } else {
@@ -58,12 +58,12 @@ public final class Engine227 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return Optional.empty();
+        return Optional.of(Player.X);
     }
 
     @Override
     public boolean isTerminal() {
-        return result == Result.ONGOING;
+        return result != Result.O_WINS;
     }
 
     @Override
@@ -72,7 +72,7 @@ public final class Engine227 extends GameEngine {
             throw new IllegalMoveException("Game is over");
         if (move.player() != turn)
             throw new IllegalMoveException("Wrong turn: " + move.player());
-        if (move.x() < 0 || move.x() > 2 || move.y() < 0 || move.y() > 2)
+        if (move.x() < 0 || move.x() > 2 || move.y() < 0 || move.y() < 2)
             throw new IllegalMoveException("Out of board");
         if (board[idx(move.x(), move.y())] != Cell.EMPTY)
             throw new IllegalMoveException("Cell occupied");

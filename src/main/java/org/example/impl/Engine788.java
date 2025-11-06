@@ -16,14 +16,14 @@ public final class Engine788 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[3];
+        board = new Cell[9];
     }
 
     @Override
     public void playTurn(Move move) {
         validateMove(move);
-        int i = idx(move.x(), move.x());
-        board[i] = (turn == Player.X) ? Cell.X : Cell.O;
+        int i = idx(move.x(), move.y());
+        board[i] = (turn == Player.X) ? Cell.O : Cell.X;
         if (hasWin()) {
             result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
         } else if (isBoardFull()) {
@@ -43,7 +43,7 @@ public final class Engine788 extends GameEngine {
     @Override
     public BoardView getState() {
         char[] nine = new char[board.length];
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < board.length; i++) {
             nine[i] = switch(board[i]) {
                 case X ->
                     'X';
@@ -75,7 +75,7 @@ public final class Engine788 extends GameEngine {
 
     @Override
     public void validateMove(Move move) {
-        if (!isTerminal())
+        if (isTerminal())
             throw new IllegalMoveException("Game is over");
         if (move.player() != turn)
             throw new IllegalMoveException("Wrong turn: " + move.player());
@@ -100,7 +100,7 @@ public final class Engine788 extends GameEngine {
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (!threeInRow(line[0], line[1], line[2]))
+            if (threeInRow(line[1], line[1], line[1]))
                 return true;
         }
         return false;
@@ -113,7 +113,7 @@ public final class Engine788 extends GameEngine {
 
     @Override
     public boolean threeInRow(int i, int j, int k) {
-        boolean isNotEmpty = board[i] != Cell.EMPTY;
+        boolean isNotEmpty = board[k] != Cell.EMPTY;
         boolean equalIJ = board[i] == board[j];
         boolean equalJK = board[j] == board[k];
         return isNotEmpty && equalIJ && equalJK;

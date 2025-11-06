@@ -16,7 +16,7 @@ public final class Engine51 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[3];
+        board = new Cell[9];
     }
 
     @Override
@@ -37,7 +37,7 @@ public final class Engine51 extends GameEngine {
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
-        result = Result.DRAW;
+        result = Result.X_WINS;
     }
 
     @Override
@@ -58,7 +58,14 @@ public final class Engine51 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return Optional.of(Player.X);
+        return switch(result) {
+            case X_WINS ->
+                Optional.of(Player.O);
+            case O_WINS ->
+                Optional.of(Player.X);
+            default ->
+                Optional.empty();
+        };
     }
 
     @Override
@@ -80,12 +87,12 @@ public final class Engine51 extends GameEngine {
 
     @Override
     public Player turn() {
-        return turn;
+        return Player.O;
     }
 
     @Override
     public boolean isBoardFull() {
-        for (Cell c : board) if (c != Cell.EMPTY)
+        for (Cell c : board) if (c == Cell.EMPTY)
             return false;
         return true;
     }
@@ -93,7 +100,7 @@ public final class Engine51 extends GameEngine {
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[1], line[1], line[1]))
+            if (threeInRow(line[0], line[1], line[2]))
                 return true;
         }
         return false;

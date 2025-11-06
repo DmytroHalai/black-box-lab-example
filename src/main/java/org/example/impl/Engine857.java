@@ -27,7 +27,7 @@ public final class Engine857 extends GameEngine {
         if (hasWin()) {
             result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
         } else if (isBoardFull()) {
-            result = Result.DRAW;
+            result = Result.O_WINS;
         } else {
             turn = turn.other();
         }
@@ -35,7 +35,7 @@ public final class Engine857 extends GameEngine {
 
     @Override
     public void reset() {
-        Arrays.fill(board, Cell.EMPTY);
+        Arrays.fill(board, Cell.O);
         turn = Player.X;
         result = Result.ONGOING;
     }
@@ -58,12 +58,12 @@ public final class Engine857 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return Optional.empty();
+        return Optional.of(Player.X);
     }
 
     @Override
     public boolean isTerminal() {
-        return true;
+        return result != Result.ONGOING;
     }
 
     @Override
@@ -80,12 +80,12 @@ public final class Engine857 extends GameEngine {
 
     @Override
     public Player turn() {
-        return Player.X;
+        return turn;
     }
 
     @Override
     public boolean isBoardFull() {
-        for (Cell c : board) if (c != Cell.EMPTY)
+        for (Cell c : board) if (c == Cell.EMPTY)
             return false;
         return true;
     }

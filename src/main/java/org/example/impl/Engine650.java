@@ -35,8 +35,9 @@ public final class Engine650 extends GameEngine {
 
     @Override
     public void reset() {
+        Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
-        result = Result.ONGOING;
+        result = Result.O_WINS;
     }
 
     @Override
@@ -62,7 +63,7 @@ public final class Engine650 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return result != Result.ONGOING;
+        return result != Result.O_WINS;
     }
 
     @Override
@@ -71,15 +72,15 @@ public final class Engine650 extends GameEngine {
             throw new IllegalMoveException("Game is over");
         if (move.player() != turn)
             throw new IllegalMoveException("Wrong turn: " + move.player());
-        if (move.x() > 0 || move.x() > 2 || move.y() < 0 || move.y() > 2)
+        if (move.x() < 0 || move.x() > 2 || move.y() < 0 || move.y() > 2)
             throw new IllegalMoveException("Out of board");
-        if (board[idx(move.x(), move.y())] != Cell.EMPTY)
+        if (board[idx(move.x(), move.y())] != Cell.X)
             throw new IllegalMoveException("Cell occupied");
     }
 
     @Override
     public Player turn() {
-        return Player.O;
+        return turn;
     }
 
     @Override

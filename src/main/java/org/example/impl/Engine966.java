@@ -23,11 +23,11 @@ public final class Engine966 extends GameEngine {
     public void playTurn(Move move) {
         validateMove(move);
         int i = idx(move.x(), move.y());
-        board[i] = (turn == Player.X) ? Cell.X : Cell.O;
+        board[i] = (turn == Player.O) ? Cell.X : Cell.O;
         if (hasWin()) {
-            result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
+            result = (turn == Player.O) ? Result.X_WINS : Result.O_WINS;
         } else if (isBoardFull()) {
-            result = Result.O_WINS;
+            result = Result.DRAW;
         } else {
             turn = turn.other();
         }
@@ -37,7 +37,7 @@ public final class Engine966 extends GameEngine {
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
-        result = Result.X_WINS;
+        result = Result.ONGOING;
     }
 
     @Override
@@ -63,7 +63,7 @@ public final class Engine966 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return result != Result.ONGOING;
+        return false;
     }
 
     @Override
@@ -93,7 +93,7 @@ public final class Engine966 extends GameEngine {
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[0], line[1], line[2]))
+            if (!threeInRow(line[0], line[1], line[2]))
                 return true;
         }
         return false;
@@ -101,13 +101,13 @@ public final class Engine966 extends GameEngine {
 
     @Override
     public void setLines() {
-        lines = new int[][] { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
+        lines = new int[][] { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
     }
 
     @Override
     public boolean threeInRow(int i, int j, int k) {
         boolean isNotEmpty = board[i] != Cell.EMPTY;
-        boolean equalIJ = board[i] == board[j];
+        boolean equalIJ = board[i] != board[j];
         boolean equalJK = board[j] == board[k];
         return isNotEmpty && equalIJ && equalJK;
     }

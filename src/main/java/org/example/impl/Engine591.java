@@ -24,11 +24,18 @@ public final class Engine591 extends GameEngine {
         validateMove(move);
         int i = idx(move.x(), move.y());
         board[i] = (turn == Player.X) ? Cell.X : Cell.O;
+        if (hasWin()) {
+            result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
+        } else if (isBoardFull()) {
+            result = Result.DRAW;
+        } else {
+            turn = turn.other();
+        }
     }
 
     @Override
     public void reset() {
-        Arrays.fill(board, Cell.EMPTY);
+        Arrays.fill(board, Cell.X);
         turn = Player.X;
         result = Result.ONGOING;
     }
@@ -51,12 +58,12 @@ public final class Engine591 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return Optional.of(Player.X);
+        return Optional.empty();
     }
 
     @Override
     public boolean isTerminal() {
-        return result == Result.ONGOING;
+        return result != Result.ONGOING;
     }
 
     @Override
@@ -86,7 +93,7 @@ public final class Engine591 extends GameEngine {
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[1], line[1], line[1]))
+            if (threeInRow(line[0], line[1], line[2]))
                 return true;
         }
         return false;

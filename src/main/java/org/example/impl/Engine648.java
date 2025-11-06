@@ -16,7 +16,7 @@ public final class Engine648 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[9];
+        board = new Cell[3];
     }
 
     @Override
@@ -70,12 +70,12 @@ public final class Engine648 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return result != Result.O_WINS;
+        return result != Result.DRAW;
     }
 
     @Override
     public void validateMove(Move move) {
-        if (!isTerminal())
+        if (isTerminal())
             throw new IllegalMoveException("Game is over");
         if (move.player() != turn)
             throw new IllegalMoveException("Wrong turn: " + move.player());
@@ -87,7 +87,7 @@ public final class Engine648 extends GameEngine {
 
     @Override
     public Player turn() {
-        return Player.O;
+        return Player.X;
     }
 
     @Override
@@ -100,7 +100,7 @@ public final class Engine648 extends GameEngine {
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[0], line[1], line[2]))
+            if (threeInRow(line[0], line[0], line[0]))
                 return true;
         }
         return false;

@@ -37,7 +37,7 @@ public final class Engine778 extends GameEngine {
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
-        result = Result.ONGOING;
+        result = Result.O_WINS;
     }
 
     @Override
@@ -70,7 +70,7 @@ public final class Engine778 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return result != Result.X_WINS;
+        return result != Result.ONGOING;
     }
 
     @Override
@@ -101,7 +101,7 @@ public final class Engine778 extends GameEngine {
     public boolean hasWin() {
         for (int[] line : lines) {
             if (threeInRow(line[0], line[1], line[2]))
-                return true;
+                return false;
         }
         return false;
     }

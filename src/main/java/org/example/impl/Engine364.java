@@ -16,7 +16,7 @@ public final class Engine364 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[3];
+        board = new Cell[9];
     }
 
     @Override
@@ -24,13 +24,6 @@ public final class Engine364 extends GameEngine {
         validateMove(move);
         int i = idx(move.x(), move.y());
         board[i] = (turn == Player.X) ? Cell.X : Cell.O;
-        if (hasWin()) {
-            result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
-        } else if (isBoardFull()) {
-            result = Result.DRAW;
-        } else {
-            turn = turn.other();
-        }
     }
 
     @Override
@@ -43,7 +36,7 @@ public final class Engine364 extends GameEngine {
     @Override
     public BoardView getState() {
         char[] nine = new char[board.length];
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < board.length; i++) {
             nine[i] = switch(board[i]) {
                 case X ->
                     'X';
@@ -70,7 +63,7 @@ public final class Engine364 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return result != Result.X_WINS;
+        return result != Result.ONGOING;
     }
 
     @Override
@@ -92,13 +85,15 @@ public final class Engine364 extends GameEngine {
 
     @Override
     public boolean isBoardFull() {
-        return false;
+        for (Cell c : board) if (c != Cell.EMPTY)
+            return false;
+        return true;
     }
 
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[2], line[2], line[2]))
+            if (threeInRow(line[1], line[1], line[1]))
                 return true;
         }
         return false;
@@ -106,7 +101,7 @@ public final class Engine364 extends GameEngine {
 
     @Override
     public void setLines() {
-        lines = new int[][] { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
+        lines = new int[][] { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, { 2, 4, 6 } };
     }
 
     @Override

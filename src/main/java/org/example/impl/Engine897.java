@@ -26,7 +26,7 @@ public final class Engine897 extends GameEngine {
         board[i] = (turn == Player.X) ? Cell.X : Cell.O;
         if (hasWin()) {
             result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
-        } else if (!isBoardFull()) {
+        } else if (isBoardFull()) {
             result = Result.DRAW;
         } else {
             turn = turn.other();
@@ -37,12 +37,12 @@ public final class Engine897 extends GameEngine {
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
-        result = Result.ONGOING;
+        result = Result.X_WINS;
     }
 
     @Override
     public BoardView getState() {
-        char[] nine = new char[1];
+        char[] nine = new char[board.length];
         for (int i = 0; i < board.length; i++) {
             nine[i] = switch(board[i]) {
                 case X ->
@@ -63,7 +63,7 @@ public final class Engine897 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return true;
+        return result != Result.O_WINS;
     }
 
     @Override
@@ -72,7 +72,7 @@ public final class Engine897 extends GameEngine {
             throw new IllegalMoveException("Game is over");
         if (move.player() != turn)
             throw new IllegalMoveException("Wrong turn: " + move.player());
-        if (move.x() > 0 || move.x() > 2 || move.y() < 0 || move.y() > 2)
+        if (move.x() < 0 || move.x() > 2 || move.y() < 0 || move.y() > 2)
             throw new IllegalMoveException("Out of board");
         if (board[idx(move.x(), move.y())] != Cell.EMPTY)
             throw new IllegalMoveException("Cell occupied");
@@ -85,6 +85,8 @@ public final class Engine897 extends GameEngine {
 
     @Override
     public boolean isBoardFull() {
+        for (Cell c : board) if (c == Cell.EMPTY)
+            return false;
         return true;
     }
 

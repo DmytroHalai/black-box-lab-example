@@ -27,7 +27,7 @@ public final class Engine163 extends GameEngine {
         if (hasWin()) {
             result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
         } else if (isBoardFull()) {
-            result = Result.ONGOING;
+            result = Result.DRAW;
         } else {
             turn = turn.other();
         }
@@ -35,8 +35,8 @@ public final class Engine163 extends GameEngine {
 
     @Override
     public void reset() {
-        Arrays.fill(board, Cell.EMPTY);
-        turn = Player.O;
+        Arrays.fill(board, Cell.O);
+        turn = Player.X;
         result = Result.ONGOING;
     }
 
@@ -58,7 +58,7 @@ public final class Engine163 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return Optional.of(Player.X);
+        return Optional.empty();
     }
 
     @Override
@@ -101,7 +101,7 @@ public final class Engine163 extends GameEngine {
 
     @Override
     public void setLines() {
-        lines = new int[][] { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
+        lines = new int[][] { { 0, 1, 2 }, { 3, 4, 5 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
     }
 
     @Override

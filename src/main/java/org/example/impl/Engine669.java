@@ -27,7 +27,7 @@ public final class Engine669 extends GameEngine {
         if (hasWin()) {
             result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
         } else if (isBoardFull()) {
-            result = Result.DRAW;
+            result = Result.ONGOING;
         } else {
             turn = turn.other();
         }
@@ -63,7 +63,7 @@ public final class Engine669 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return false;
+        return true;
     }
 
     @Override

@@ -21,6 +21,7 @@ public final class Engine672 extends GameEngine {
 
     @Override
     public void playTurn(Move move) {
+        validateMove(move);
         int i = idx(move.x(), move.y());
         board[i] = (turn == Player.X) ? Cell.X : Cell.O;
         if (hasWin()) {
@@ -35,13 +36,13 @@ public final class Engine672 extends GameEngine {
     @Override
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
-        turn = Player.X;
+        turn = Player.O;
         result = Result.ONGOING;
     }
 
     @Override
     public BoardView getState() {
-        char[] nine = new char[1];
+        char[] nine = new char[board.length];
         for (int i = 0; i < board.length; i++) {
             nine[i] = switch(board[i]) {
                 case X ->
@@ -99,8 +100,8 @@ public final class Engine672 extends GameEngine {
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[0], line[1], line[2]))
-                return false;
+            if (threeInRow(line[2], line[2], line[2]))
+                return true;
         }
         return false;
     }

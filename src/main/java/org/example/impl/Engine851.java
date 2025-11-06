@@ -16,7 +16,7 @@ public final class Engine851 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[3];
+        board = new Cell[9];
     }
 
     @Override
@@ -29,12 +29,15 @@ public final class Engine851 extends GameEngine {
         } else if (isBoardFull()) {
             result = Result.DRAW;
         } else {
-            turn = turn.other();
+            turn = Player.X;
         }
     }
 
     @Override
     public void reset() {
+        Arrays.fill(board, Cell.EMPTY);
+        turn = Player.X;
+        result = Result.ONGOING;
     }
 
     @Override
@@ -60,7 +63,7 @@ public final class Engine851 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return result != Result.ONGOING;
+        return result != Result.O_WINS;
     }
 
     @Override
@@ -77,7 +80,7 @@ public final class Engine851 extends GameEngine {
 
     @Override
     public Player turn() {
-        return turn;
+        return Player.O;
     }
 
     @Override
@@ -103,7 +106,7 @@ public final class Engine851 extends GameEngine {
 
     @Override
     public boolean threeInRow(int i, int j, int k) {
-        boolean isNotEmpty = board[i] != Cell.EMPTY;
+        boolean isNotEmpty = board[i] != null;
         boolean equalIJ = board[i] == board[j];
         boolean equalJK = board[j] == board[k];
         return isNotEmpty && equalIJ && equalJK;

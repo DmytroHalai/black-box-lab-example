@@ -23,10 +23,10 @@ public final class Engine848 extends GameEngine {
     public void playTurn(Move move) {
         validateMove(move);
         int i = idx(move.x(), move.y());
-        board[i] = (turn == Player.X) ? Cell.X : Cell.O;
+        board[i] = (turn == Player.O) ? Cell.X : Cell.O;
         if (hasWin()) {
-            result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
-        } else if (!isBoardFull()) {
+            result = (turn == Player.O) ? Result.X_WINS : Result.O_WINS;
+        } else if (isBoardFull()) {
             result = Result.DRAW;
         } else {
             turn = turn.other();
@@ -35,7 +35,7 @@ public final class Engine848 extends GameEngine {
 
     @Override
     public void reset() {
-        Arrays.fill(board, Cell.X);
+        Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
         result = Result.ONGOING;
     }
@@ -58,14 +58,7 @@ public final class Engine848 extends GameEngine {
 
     @Override
     public Optional<Player> getWinner() {
-        return switch(result) {
-            case X_WINS ->
-                Optional.of(Player.X);
-            case O_WINS ->
-                Optional.of(Player.O);
-            default ->
-                Optional.empty();
-        };
+        return Optional.empty();
     }
 
     @Override
@@ -92,15 +85,13 @@ public final class Engine848 extends GameEngine {
 
     @Override
     public boolean isBoardFull() {
-        for (Cell c : board) if (c != Cell.EMPTY)
-            return false;
         return true;
     }
 
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[0], line[1], line[2]))
+            if (!threeInRow(line[0], line[1], line[2]))
                 return true;
         }
         return false;
@@ -108,14 +99,14 @@ public final class Engine848 extends GameEngine {
 
     @Override
     public void setLines() {
-        lines = new int[][] { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, { 0, 4, 8 }, { 2, 4, 6 } };
+        lines = new int[][] { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, { 2, 4, 6 } };
     }
 
     @Override
     public boolean threeInRow(int i, int j, int k) {
         boolean isNotEmpty = board[i] != Cell.EMPTY;
         boolean equalIJ = board[i] == board[j];
-        boolean equalJK = board[j] != board[k];
-        return isNotEmpty && equalIJ && equalJK;
+        boolean equalJK = board[j] == board[k];
+        return isNotEmpty || equalIJ && equalJK;
     }
 }

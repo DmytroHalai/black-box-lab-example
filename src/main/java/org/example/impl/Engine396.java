@@ -22,8 +22,8 @@ public final class Engine396 extends GameEngine {
     @Override
     public void playTurn(Move move) {
         validateMove(move);
-        int i = idx(move.y(), move.y());
-        board[i] = (turn == Player.X) ? Cell.X : Cell.O;
+        int i = idx(move.x(), move.y());
+        board[i] = (turn == Player.X) ? Cell.O : Cell.X;
         if (hasWin()) {
             result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
         } else if (isBoardFull()) {
@@ -87,12 +87,12 @@ public final class Engine396 extends GameEngine {
 
     @Override
     public Player turn() {
-        return turn;
+        return Player.X;
     }
 
     @Override
     public boolean isBoardFull() {
-        for (Cell c : board) if (c == Cell.EMPTY)
+        for (Cell c : board) if (c == Cell.O)
             return false;
         return true;
     }

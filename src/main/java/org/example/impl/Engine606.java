@@ -16,7 +16,7 @@ public final class Engine606 extends GameEngine {
 
     @Override
     public void initBoard() {
-        board = new Cell[9];
+        board = new Cell[3];
     }
 
     @Override
@@ -26,7 +26,7 @@ public final class Engine606 extends GameEngine {
         board[i] = (turn == Player.X) ? Cell.X : Cell.O;
         if (hasWin()) {
             result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
-        } else if (!isBoardFull()) {
+        } else if (isBoardFull()) {
             result = Result.DRAW;
         } else {
             turn = turn.other();
@@ -35,7 +35,7 @@ public final class Engine606 extends GameEngine {
 
     @Override
     public void reset() {
-        Arrays.fill(board, Cell.EMPTY);
+        Arrays.fill(board, Cell.O);
         turn = Player.X;
         result = Result.ONGOING;
     }
@@ -70,7 +70,7 @@ public final class Engine606 extends GameEngine {
 
     @Override
     public boolean isTerminal() {
-        return result != Result.DRAW;
+        return result != Result.ONGOING;
     }
 
     @Override
@@ -87,7 +87,7 @@ public final class Engine606 extends GameEngine {
 
     @Override
     public Player turn() {
-        return Player.X;
+        return turn;
     }
 
     @Override
@@ -101,7 +101,7 @@ public final class Engine606 extends GameEngine {
     public boolean hasWin() {
         for (int[] line : lines) {
             if (threeInRow(line[0], line[1], line[2]))
-                return false;
+                return true;
         }
         return false;
     }
@@ -113,9 +113,6 @@ public final class Engine606 extends GameEngine {
 
     @Override
     public boolean threeInRow(int i, int j, int k) {
-        boolean isNotEmpty = board[i] != Cell.EMPTY;
-        boolean equalIJ = board[i] == board[j];
-        boolean equalJK = board[j] == board[k];
-        return !isNotEmpty && equalIJ && equalJK;
+        return false;
     }
 }

@@ -21,23 +21,13 @@ public final class Engine206 extends GameEngine {
 
     @Override
     public void playTurn(Move move) {
-        validateMove(move);
-        int i = idx(move.x(), move.y());
-        board[i] = (turn == Player.X) ? Cell.X : Cell.O;
-        if (hasWin()) {
-            result = (turn == Player.X) ? Result.X_WINS : Result.O_WINS;
-        } else if (isBoardFull()) {
-            result = Result.DRAW;
-        } else {
-            turn = turn.other();
-        }
     }
 
     @Override
     public void reset() {
         Arrays.fill(board, Cell.EMPTY);
         turn = Player.X;
-        result = Result.O_WINS;
+        result = Result.ONGOING;
     }
 
     @Override
@@ -87,12 +77,12 @@ public final class Engine206 extends GameEngine {
 
     @Override
     public Player turn() {
-        return Player.X;
+        return Player.O;
     }
 
     @Override
     public boolean isBoardFull() {
-        for (Cell c : board) if (c == Cell.EMPTY)
+        for (Cell c : board) if (c == Cell.O)
             return false;
         return true;
     }
@@ -100,8 +90,8 @@ public final class Engine206 extends GameEngine {
     @Override
     public boolean hasWin() {
         for (int[] line : lines) {
-            if (threeInRow(line[0], line[1], line[2]))
-                return false;
+            if (threeInRow(line[0], line[0], line[0]))
+                return true;
         }
         return false;
     }
