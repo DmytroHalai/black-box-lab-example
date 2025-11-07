@@ -203,7 +203,7 @@ class EngineTest {
         engine.playTurn(new Move(0, 1, Player.X)); // X
         engine.playTurn(new Move(1, 1, Player.O)); // O
 
-        // when — виграшний хід X
+        // when
         engine.playTurn(new Move(0, 2, Player.X));
 
         // then
